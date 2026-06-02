@@ -20,6 +20,30 @@ input[type="date"] {
   appearance: none;
   -webkit-appearance: none;
   min-height: 46px;
+  position: relative;
+}
+
+input[type="date"]::before {
+  content: attr(placeholder);
+  position: absolute;
+  left: 0.75rem; /* px-3 */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af; /* gray-400 */
+  font-size: 0.875rem; /* text-sm */
+  pointer-events: none;
+}
+
+/* For RoomDetails where there is an icon */
+.pl-10[type="date"]::before {
+  left: 2.5rem; /* pl-10 */
+}
+
+input[type="date"]:focus::before,
+input[type="date"]:not(:placeholder-shown)::before,
+input[type="date"]:valid::before {
+  display: none !important;
+  content: "" !important;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -33,4 +57,5 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: transparent;
   background: transparent;
   cursor: pointer;
+  z-index: 1;
 }
