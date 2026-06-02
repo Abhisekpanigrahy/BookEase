@@ -179,17 +179,17 @@ const MyBookings = () => {
                             </div>
                         )
                         : bookings.map(booking => {
-                            const isCompleted = new Date() > new Date(booking.checkOutDate);
                             return (
-                                <AnimateIn key={booking._id} as='div' variant='fadeUpSoft' once={false} className='grid grid-cols-1 md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-100 py-6 first:border-t hover:bg-gray-50/60 transition-colors rounded-xl px-2'>
-
+                                <AnimateIn key={booking._id} as='div' variant='fadeUpSoft' once={false} 
+                                    className='grid grid-cols-1 md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-100 py-6 first:border-t hover:bg-gray-50/60 transition-colors rounded-xl px-2 cursor-pointer relative group'
+                                    onClick={() => { navigate(`/rooms/${booking.room._id}`); scrollTo(0, 0); }}
+                                >
                                     {/* Hotel info */}
-                                    <div className='flex flex-col md:flex-row gap-4 cursor-pointer'
-                                        onClick={() => { navigate(`/rooms/${booking.room._id}`); scrollTo(0, 0); }}>
+                                    <div className='flex flex-col md:flex-row gap-4'>
                                         <img src={booking.room.images[0]} alt="hotel"
                                             className='md:w-40 h-28 md:h-28 rounded-xl object-cover shadow-sm' />
                                         <div className='flex flex-col gap-1.5'>
-                                            <p className='font-playfair text-xl font-semibold hover:text-[#5b7fe8] transition-colors'>{booking.hotel.name}
+                                            <p className='font-playfair text-xl font-semibold group-hover:text-[#5b7fe8] transition-colors'>{booking.hotel.name}
                                                 <span className='font-inter text-xs font-normal text-gray-400 ml-1.5'>({booking.room.roomType})</span>
                                             </p>
                                             <div className='flex items-center gap-1 text-xs text-gray-500'>
@@ -219,7 +219,7 @@ const MyBookings = () => {
                                     </div>
 
                                     {/* Actions */}
-                                    <div className='flex flex-col items-start justify-center pt-3 md:pt-0 gap-3'>
+                                    <div className='flex flex-col items-start justify-center pt-3 md:pt-0 gap-3' onClick={e => e.stopPropagation()}>
                                         <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full ${booking.isPaid ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'}`}>
                                             <span className={`w-1.5 h-1.5 rounded-full ${booking.isPaid ? 'bg-emerald-500' : 'bg-red-500'}`} />
                                             {booking.isPaid ? 'Paid' : 'Unpaid'}
@@ -231,7 +231,7 @@ const MyBookings = () => {
                                                 {paying === booking._id ? 'Redirecting…' : 'Pay Now →'}
                                             </button>
                                         )}
-                                        {isCompleted && booking.isPaid && (
+                                        {booking.isPaid && (
                                             <button 
                                                 onClick={() => setReviewing(booking)}
                                                 className='text-xs font-bold text-[#5b7fe8] border border-[#5b7fe8] hover:bg-[#5b7fe8] hover:text-white px-5 py-2 rounded-xl transition-all active:scale-95 cursor-pointer'
