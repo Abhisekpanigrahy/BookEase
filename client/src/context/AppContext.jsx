@@ -22,6 +22,7 @@ export const AppProvider = ({ children }) => {
     const { getToken } = useAuth();
 
     const [isOwner,       setIsOwner]       = useState(false);
+    const [isRoleLoaded,  setIsRoleLoaded]  = useState(false);
     const [showHotelReg,  setShowHotelReg]  = useState(false);
     const [searchedCities, setSearchedCities] = useState([]);
     const [rooms,         setRooms]         = useState([]);
@@ -46,7 +47,10 @@ export const AppProvider = ({ children }) => {
     const fetchUser = async () => {
         try {
             const token = await getToken();
-            if (!token) return;
+            if (!token) {
+                setIsRoleLoaded(true);
+                return;
+            }
             const { data } = await axios.get('/api/user', {
                 headers: { Authorization: `Bearer ${token}` },
                 timeout: 8000,
@@ -55,14 +59,26 @@ export const AppProvider = ({ children }) => {
                 setIsOwner(data.role === 'hotelOwner');
                 setSearchedCities(data.recentSearchedCities || []);
             }
-        } catch (_) { /* silent — not critical for page render */ }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        } finally {
+            setIsRoleLoaded(true);
+        }
     };
 
     // Fire rooms fetch immediately on mount (no auth needed)
     useEffect(() => { fetchRooms(); }, []);
 
     // Fire user fetch as soon as Clerk user is ready
-    useEffect(() => { if (user) fetchUser(); }, [user]);
+    useEffect(() => {
+        if (user) {
+            fetchUser();
+        } else if (user === null) {
+            setIsOwner(false);
+            setSearchedCities([]);
+            setIsRoleLoaded(true);
+        }
+    }, [user]);
 
     const value = {
         currency, navigate, axios, toast,
@@ -70,6 +86,7 @@ export const AppProvider = ({ children }) => {
         user: userLoaded ? user : undefined,
         getToken,
         isOwner,  setIsOwner,
+        isRoleLoaded,
         showHotelReg, setShowHotelReg,
         searchedCities, setSearchedCities,
         rooms,    setRooms,

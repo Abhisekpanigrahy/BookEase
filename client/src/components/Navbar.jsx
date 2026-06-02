@@ -26,7 +26,7 @@ const Navbar = () => {
     const location = useLocation();
 
     // user can be null (not logged in), undefined (Clerk still loading), or object (loaded)
-    const { user, navigate, isOwner, setShowHotelReg } = useAppContext();
+    const { user, navigate, isOwner, isRoleLoaded, setShowHotelReg } = useAppContext();
 
     // isOwner is false until fetchUser resolves — use a stable "auth ready" flag
     // Clerk sets user to null (not logged in) or an object (logged in) — undefined means still loading
@@ -83,8 +83,8 @@ const Navbar = () => {
                     </NavLink>
                 ))}
 
-                {/* Show dashboard button only when auth is fully resolved */}
-                {authReady && user && dashboardBtn}
+                {/* Show dashboard button only when auth and role are fully resolved */}
+                {authReady && user && isRoleLoaded && dashboardBtn}
             </div>
 
             {/* Desktop right */}
@@ -147,7 +147,7 @@ const Navbar = () => {
                 </NavLink>
             ))}
 
-            {authReady && user && (
+            {authReady && user && isRoleLoaded && (
                 <button
                     className="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer"
                     onClick={() => { isOwner ? navigate('/owner') : setShowHotelReg(true); setIsMenuOpen(false); }}>
