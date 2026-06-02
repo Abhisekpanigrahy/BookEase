@@ -73,7 +73,8 @@ const Hero = () => {
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check In
                             </label>
                             <input type="date" value={checkIn} onChange={e => setCheckIn(e.target.value)}
-                                className='border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all' />
+                                placeholder="dd-mm-yyyy"
+                                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' />
                         </div>
 
                         <div className='flex flex-col gap-1'>
@@ -81,7 +82,8 @@ const Hero = () => {
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check Out
                             </label>
                             <input type="date" value={checkOut} onChange={e => setCheckOut(e.target.value)}
-                                className='border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all' />
+                                placeholder="dd-mm-yyyy"
+                                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' />
                         </div>
 
                         <div className='flex flex-col gap-1'>

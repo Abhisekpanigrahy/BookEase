@@ -99,13 +99,15 @@ const RoomDetails = () => {
                     <div className='flex flex-col'>
                         <label htmlFor="checkInDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-In</label>
                         <input onChange={e => setCheckInDate(e.target.value)} min={new Date().toISOString().split('T')[0]} type="date" id='checkInDate'
-                            className='border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all' required />
+                            placeholder="dd-mm-yyyy"
+                            className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' required />
                     </div>
                     <div className='w-px h-12 bg-gray-200 max-md:hidden' />
                     <div className='flex flex-col'>
                         <label htmlFor="checkOutDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-Out</label>
                         <input onChange={e => setCheckOutDate(e.target.value)} min={checkInDate} disabled={!checkInDate} type="date" id='checkOutDate'
-                            className='border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all disabled:opacity-50' required />
+                            placeholder="dd-mm-yyyy"
+                            className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all disabled:opacity-50 cursor-pointer min-h-[46px]' required />
                     </div>
                     <div className='w-px h-12 bg-gray-200 max-md:hidden' />
                     <div className='flex flex-col'>
