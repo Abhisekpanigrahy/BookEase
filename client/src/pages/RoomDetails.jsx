@@ -145,7 +145,9 @@ const RoomDetails = () => {
             {/* Hosted by */}
             <div className='flex flex-col items-start gap-4'>
                 <div className='flex gap-4 items-center'>
-                    <img src={room.hotel.owner.image} alt="Host" className='h-14 w-14 md:h-16 md:w-16 rounded-full ring-2 ring-[#85A4E1]/30' />
+                    {room.hotel.owner && (
+                        <img src={room.hotel.owner.image} alt="Host" className='h-14 w-14 md:h-16 md:w-16 rounded-full ring-2 ring-[#85A4E1]/30' />
+                    )}
                     <div>
                         <p className='text-lg md:text-xl font-semibold text-gray-800'>Hosted by {room.hotel.name}</p>
                         <div className='flex items-center mt-1'><StarRating /><p className='ml-2 text-sm text-gray-500'>200+ reviews</p></div>
