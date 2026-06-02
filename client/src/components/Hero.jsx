@@ -97,7 +97,9 @@ const Hero = () => {
                                 {/* Desktop search button - hidden on mobile */}
                                 <button type='submit'
                                     className='hidden lg:flex flex-1 items-center justify-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white rounded-xl py-2.5 px-4 text-sm font-bold shadow-lg shadow-[#85A4E1]/35 hover:shadow-xl hover:shadow-[#85A4E1]/50 hover:-translate-y-0.5 active:scale-95 active:translate-y-0 transition-all duration-200 cursor-pointer'>
-                                    <img src={assets.searchIcon} alt="" className='h-4 invert' />
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
                                     Search
                                 </button>
                             </div>
@@ -106,7 +108,9 @@ const Hero = () => {
                         {/* Mobile search button - full width at bottom */}
                         <button type='submit'
                             className='lg:hidden flex w-full items-center justify-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white rounded-xl py-3 px-4 text-sm font-bold shadow-lg shadow-[#85A4E1]/35 hover:shadow-xl hover:shadow-[#85A4E1]/50 hover:-translate-y-0.5 active:scale-95 active:translate-y-0 transition-all duration-200 cursor-pointer mt-2'>
-                            <img src={assets.searchIcon} alt="" className='h-4 invert' />
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
                             Search Hotels
                         </button>
                     </div>
