@@ -208,14 +208,15 @@ const ListRoom = () => {
                 </button>
             </div>
 
-            <div className='w-full max-w-5xl border border-gray-200 rounded-2xl overflow-hidden shadow-sm'>
-                <div className='max-h-[600px] overflow-y-auto'>
+            <div className='w-full border border-gray-200 rounded-2xl overflow-hidden shadow-sm'>
+                {/* ── Desktop table ── */}
+                <div className='hidden sm:block max-h-[600px] overflow-y-auto'>
                     <table className='w-full text-left'>
                         <thead className='bg-gray-50 sticky top-0 z-10'>
                             <tr>
                                 <th className='py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider w-16'>Image</th>
                                 <th className='py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider'>Room Type</th>
-                                <th className='py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider max-sm:hidden'>Amenities</th>
+                                <th className='py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider'>Amenities</th>
                                 <th className='py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider'>Price / Night</th>
                                 <th className='py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center'>Available</th>
                                 <th className='py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center'>Actions</th>
@@ -226,20 +227,13 @@ const ListRoom = () => {
                                 ? Array.from({ length: 4 }).map((_, i) => <TableRowSkeleton key={i} cols={6} />)
                                 : rooms.map((item) => (
                                     <tr key={item._id} className='hover:bg-gray-50/70 transition-colors'>
-                                        {/* Room image */}
                                         <td className='py-3 px-4'>
-                                            <img
-                                                src={item.images?.[0]}
-                                                alt={item.roomType}
-                                                className='w-14 h-12 object-cover rounded-lg shadow-sm'
-                                            />
+                                            <img src={item.images?.[0]} alt={item.roomType} className='w-14 h-12 object-cover rounded-lg shadow-sm' />
                                         </td>
-                                        {/* Room type */}
                                         <td className='py-3 px-4'>
                                             <span className='font-semibold text-gray-800'>{item.roomType}</span>
                                         </td>
-                                        {/* Amenities */}
-                                        <td className='py-3 px-4 max-sm:hidden'>
+                                        <td className='py-3 px-4'>
                                             <div className='flex flex-wrap gap-1'>
                                                 {item.amenities.slice(0, 3).map(a => (
                                                     <span key={a} className='text-xs bg-[#85A4E1]/10 text-[#5b7fe8] px-2 py-0.5 rounded-full font-medium'>{a}</span>
@@ -249,9 +243,7 @@ const ListRoom = () => {
                                                 )}
                                             </div>
                                         </td>
-                                        {/* Price */}
                                         <td className='py-3 px-4 font-bold text-gray-800'>{currency} {item.pricePerNight}</td>
-                                        {/* Toggle */}
                                         <td className='py-3 px-4'>
                                             <label className='relative inline-flex items-center justify-center cursor-pointer gap-2 w-full'>
                                                 <input type='checkbox' className='sr-only peer'
@@ -260,22 +252,15 @@ const ListRoom = () => {
                                                 <div className='w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-[#5b7fe8] transition-colors duration-200 relative after:content-[""] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5' />
                                             </label>
                                         </td>
-                                        {/* Edit / Delete actions */}
                                         <td className='py-3 px-4'>
                                             <div className='flex items-center justify-center gap-2'>
-                                                {/* Edit */}
-                                                <button
-                                                    onClick={() => setEditTarget(item)}
-                                                    title='Edit room'
+                                                <button onClick={() => setEditTarget(item)} title='Edit room'
                                                     className='w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 hover:bg-blue-100 text-[#5b7fe8] transition-colors cursor-pointer'>
                                                     <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' />
                                                     </svg>
                                                 </button>
-                                                {/* Delete */}
-                                                <button
-                                                    onClick={() => setDeleteTarget(item._id)}
-                                                    title='Delete room'
+                                                <button onClick={() => setDeleteTarget(item._id)} title='Delete room'
                                                     className='w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 hover:bg-red-100 text-red-500 transition-colors cursor-pointer'>
                                                     <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
@@ -288,6 +273,74 @@ const ListRoom = () => {
                             }
                         </tbody>
                     </table>
+                </div>
+
+                {/* ── Mobile cards ── */}
+                <div className='sm:hidden divide-y divide-gray-100'>
+                    {loading
+                        ? Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className='p-4 flex gap-3 animate-pulse'>
+                                <div className='w-16 h-16 bg-gray-200 rounded-xl shrink-0' />
+                                <div className='flex-1 space-y-2 py-1'>
+                                    <div className='h-3 bg-gray-200 rounded w-1/2' />
+                                    <div className='h-3 bg-gray-200 rounded w-1/3' />
+                                </div>
+                            </div>
+                        ))
+                        : rooms.map((item) => (
+                            <div key={item._id} className='p-4 flex gap-3 items-start'>
+                                {/* Thumbnail */}
+                                <img src={item.images?.[0]} alt={item.roomType}
+                                    className='w-16 h-16 object-cover rounded-xl shadow-sm shrink-0' />
+
+                                {/* Info */}
+                                <div className='flex-1 min-w-0'>
+                                    <div className='flex items-start justify-between gap-2'>
+                                        <div>
+                                            <p className='font-semibold text-gray-800 text-sm'>{item.roomType}</p>
+                                            <p className='text-sm font-bold text-[#5b7fe8] mt-0.5'>{currency} {item.pricePerNight} <span className='text-xs font-normal text-gray-500'>/night</span></p>
+                                        </div>
+                                        {/* Actions */}
+                                        <div className='flex items-center gap-1.5 shrink-0'>
+                                            <button onClick={() => setEditTarget(item)} title='Edit'
+                                                className='w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 hover:bg-blue-100 text-[#5b7fe8] transition-colors cursor-pointer'>
+                                                <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' />
+                                                </svg>
+                                            </button>
+                                            <button onClick={() => setDeleteTarget(item._id)} title='Delete'
+                                                className='w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 hover:bg-red-100 text-red-500 transition-colors cursor-pointer'>
+                                                <svg className='w-4 h-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Amenities */}
+                                    <div className='flex flex-wrap gap-1 mt-2'>
+                                        {item.amenities.slice(0, 3).map(a => (
+                                            <span key={a} className='text-xs bg-[#85A4E1]/10 text-[#5b7fe8] px-2 py-0.5 rounded-full font-medium'>{a}</span>
+                                        ))}
+                                        {item.amenities.length > 3 && (
+                                            <span className='text-xs text-gray-400'>+{item.amenities.length - 3}</span>
+                                        )}
+                                    </div>
+
+                                    {/* Availability toggle */}
+                                    <div className='flex items-center gap-2 mt-3'>
+                                        <label className='relative inline-flex items-center cursor-pointer'>
+                                            <input type='checkbox' className='sr-only peer'
+                                                checked={item.isAvailable}
+                                                onChange={() => handleToggle(item._id)} />
+                                            <div className='w-9 h-5 bg-gray-200 rounded-full peer peer-checked:bg-[#5b7fe8] transition-colors duration-200 relative after:content-[""] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4' />
+                                        </label>
+                                        <span className='text-xs text-gray-500 font-medium'>{item.isAvailable ? 'Available' : 'Unavailable'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         </div>

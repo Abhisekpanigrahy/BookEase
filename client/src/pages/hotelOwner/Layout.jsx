@@ -1,32 +1,37 @@
 import React, { useEffect } from 'react'
 import Navbar from '../../components/hotelOwner/Navbar'
 import Sidebar from '../../components/hotelOwner/Sidebar'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import { useAppContext } from '../../context/AppContext'
+import { PageTransition } from '../../components/AnimateIn'
 
 const Layout = () => {
+    const location = useLocation();
+    const { isOwner, navigate } = useAppContext();
 
-  const {isOwner, navigate} = useAppContext();
+    useEffect(() => {
+        if (!isOwner) {
+            navigate('/');
+        }
+    }, [isOwner]);
 
-  useEffect(() => {
-    if(!isOwner){
-      // Redirecting to homepage if User is not the Owner
-      navigate('/')
-    }
-  },[isOwner])
-
-  return (
-    <div className='flex flex-col h-screen'>
-      <Navbar />
-      <div className='flex h-full'>
-        <Sidebar />
-        <div className='flex-1 p-4 pt-10 md:px-10 h-full'>
-            {/*all the children component */}
-            <Outlet />                             
+    return (
+        <div className='flex flex-col h-screen'>
+            <Navbar />
+            <div className='flex flex-1 overflow-hidden'>
+                <Sidebar />
+                {/* pb-20 on mobile reserves space above the bottom nav bar */}
+                <div className='flex-1 overflow-y-auto p-4 pt-8 md:px-10 pb-24 md:pb-10'>
+                    <AnimatePresence mode='wait' initial={false}>
+                        <PageTransition key={location.pathname} className='min-h-full'>
+                            <Outlet />
+                        </PageTransition>
+                    </AnimatePresence>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  )
-}
+    );
+};
 
-export default Layout
+export default Layout;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AnimateIn, { StaggerContainer, StaggerItem } from './AnimateIn';
 
 const faqs = [
     {
@@ -63,7 +64,7 @@ const FAQ = () => {
     return (
         <section className='px-6 md:px-16 lg:px-24 py-20 bg-slate-50'>
             {/* Header */}
-            <div className='flex flex-col items-center text-center mb-14'>
+            <AnimateIn className='flex flex-col items-center text-center mb-14'>
                 <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>
                     ✦ Got Questions?
                 </p>
@@ -73,30 +74,31 @@ const FAQ = () => {
                 <p className='text-gray-500 mt-3 max-w-lg text-sm leading-relaxed'>
                     Everything you need to know about booking, payments, and managing your stay with BookEase.
                 </p>
-            </div>
+            </AnimateIn>
 
             {/* Two-column grid on large screens */}
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl mx-auto'>
+            <StaggerContainer className='grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl mx-auto' staggerDelay={0.07}>
                 {faqs.map((item, i) => (
-                    <FAQItem
-                        key={i}
-                        q={item.q}
-                        a={item.a}
-                        isOpen={openIndex === i}
-                        onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
-                    />
+                    <StaggerItem key={i} variant='fadeUp'>
+                        <FAQItem
+                            q={item.q}
+                            a={item.a}
+                            isOpen={openIndex === i}
+                            onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
+                        />
+                    </StaggerItem>
                 ))}
-            </div>
+            </StaggerContainer>
 
             {/* CTA */}
-            <div className='flex flex-col items-center mt-12 gap-3'>
+            <AnimateIn delay={0.2} className='flex flex-col items-center mt-12 gap-3'>
                 <p className='text-gray-500 text-sm'>Still have questions?</p>
                 <a
                     href="mailto:abhisekpanigrahy79@gmail.com"
                     className='inline-flex items-center gap-2 bg-gradient-to-r from-[#85A4E1] to-[#6b8fd4] hover:from-[#6b8fd4] hover:to-[#5a7ec3] text-white text-sm font-bold px-7 py-3 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:shadow-[#85A4E1]/50 hover:-translate-y-0.5 transition-all duration-200 active:scale-95'>
                     Contact Support →
                 </a>
-            </div>
+            </AnimateIn>
         </section>
     );
 };

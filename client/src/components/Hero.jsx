@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import AnimateIn from './AnimateIn'
 import { assets, cities } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 
@@ -27,8 +28,8 @@ const Hero = () => {
     };
 
     return (
-        <div className='relative min-h-screen flex flex-col items-center justify-center overflow-hidden'>
-            <div className='absolute inset-0 bg-[url("https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1920&q=85&auto=format&fit=crop")] bg-no-repeat bg-cover bg-center' />
+        <AnimateIn as='section' variant='fadeUpSoft' className='relative min-h-screen flex flex-col items-center justify-center overflow-hidden'>
+            <div className='absolute inset-0 bg-[url("https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=85&auto=format&fit=crop")] bg-no-repeat bg-cover bg-center' />
             <div className='absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70' />
 
             <div className='relative z-10 flex flex-col items-center text-center px-4 md:px-8 mt-16'>
@@ -89,7 +90,7 @@ const Hero = () => {
                             </label>
                             <div className='flex gap-2'>
                                 <input min={1} max={10} type="number" value={guests} onChange={e => setGuests(e.target.value)}
-                                    className='border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all w-20' />
+                                    className='flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all' />
                                 {/* PRIMARY search button */}
                                 <button type='submit'
                                     className='flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white rounded-xl py-2.5 px-4 text-sm font-bold shadow-lg shadow-[#85A4E1]/35 hover:shadow-xl hover:shadow-[#85A4E1]/50 hover:-translate-y-0.5 active:scale-95 active:translate-y-0 transition-all duration-200 cursor-pointer'>
@@ -114,12 +115,8 @@ const Hero = () => {
                 </div>
             </div>
 
-            <div className='absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/40 animate-bounce z-10'>
-                <div className='w-px h-8 bg-white/30' />
-                <span className='text-xs tracking-widest uppercase'>Scroll</span>
-            </div>
-        </div>
+        </AnimateIn>
     );
-};
+}
 
 export default Hero;

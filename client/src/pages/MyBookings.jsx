@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Title from '../components/Title'
+import AnimateIn from '../components/AnimateIn'
 import { assets } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 import { BookingRowSkeleton } from '../components/Skeleton'
@@ -62,7 +63,7 @@ const MyBookings = () => {
     }, [user]);
 
     return (
-        <div className='py-28 md:pb-35 md:pt-32 px-4 md:px-16 lg:px-24 xl:px-32'>
+        <AnimateIn as='div' variant='fadeUpSoft' className='py-28 md:pb-35 md:pt-32 px-4 md:px-16 lg:px-24 xl:px-32'>
             <div className='flex items-start justify-between'>
                 <Title title='My Bookings'
                     subTitle='Manage your past, current and upcoming hotel reservations in one place.' align='left' />
@@ -89,8 +90,7 @@ const MyBookings = () => {
                             </div>
                         )
                         : bookings.map(booking => (
-                            <div key={booking._id}
-                                className='grid grid-cols-1 md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-100 py-6 first:border-t hover:bg-gray-50/60 transition-colors rounded-xl px-2'>
+                            <AnimateIn key={booking._id} as='div' variant='fadeUpSoft' once={false} className='grid grid-cols-1 md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-100 py-6 first:border-t hover:bg-gray-50/60 transition-colors rounded-xl px-2'>
 
                                 {/* Hotel info */}
                                 <div className='flex flex-col md:flex-row gap-4'>
@@ -140,11 +140,11 @@ const MyBookings = () => {
                                         </button>
                                     )}
                                 </div>
-                            </div>
+                            </AnimateIn>
                         ))
                 }
             </div>
-        </div>
+        </AnimateIn>
     );
 };
 

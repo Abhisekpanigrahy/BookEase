@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import HotelCard from './HotelCard'
 import { useAppContext } from '../context/AppContext'
+import AnimateIn, { StaggerContainer, StaggerItem } from './AnimateIn'
 
 const RecommendedHotels = () => {
     const { rooms, searchedCities, navigate } = useAppContext();
@@ -32,7 +33,7 @@ const RecommendedHotels = () => {
                 </div>
                 <button
                     onClick={() => { navigate('/rooms'); scrollTo(0, 0); }}
-                    className='shrink-0 inline-flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#85A4E1] to-[#6b8fd4] hover:from-[#6b8fd4] hover:to-[#5a7ec3] px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/25 hover:shadow-lg hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 cursor-pointer'>
+                    className='shrink-0 inline-flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 cursor-pointer'>
                     Explore All
                     <span className='text-base leading-none'>→</span>
                 </button>

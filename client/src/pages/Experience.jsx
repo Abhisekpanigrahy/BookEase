@@ -1,4 +1,5 @@
 import React from 'react'
+import AnimateIn from '../components/AnimateIn'
 import { useAppContext } from '../context/AppContext'
 
 const experiences = [
@@ -41,31 +42,35 @@ const steps = [
     { num: '04', title: 'Enjoy', desc: 'Arrive, relax, and make memories. We handle everything else.' },
 ];
 
+const btnPrimary = 'inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-[#85A4E1]/30 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer';
+const btnPrimaryLg = 'inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white font-bold px-10 py-4 rounded-xl shadow-lg shadow-[#85A4E1]/30 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer text-base';
+
 const Experience = () => {
     const { navigate } = useAppContext();
 
     return (
-        <div className='pt-20'>
+        <div>
             {/* Hero */}
-            <section className='relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] py-28 px-6 md:px-16 lg:px-24 text-white overflow-hidden'>
-                <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_60%_50%,rgba(91,127,232,0.15),transparent_70%)] pointer-events-none' />
-                <div className='relative z-10 max-w-3xl'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] pt-36 pb-28 px-6 md:px-16 lg:px-24 text-white overflow-hidden'>
+                <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(91,127,232,0.15),transparent_70%)] pointer-events-none' />
+                <div className='relative z-10 max-w-3xl mx-auto text-center'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-4'>✦ The BookEase Experience</p>
                     <h1 className='font-playfair text-4xl md:text-6xl font-bold leading-tight'>
                         Travel made<br /><span className='text-[#85A4E1]'>effortless.</span>
                     </h1>
-                    <p className='mt-6 text-white/70 text-lg leading-relaxed max-w-xl'>
+                    <p className='mt-6 text-white/70 text-lg leading-relaxed max-w-xl mx-auto'>
                         We believe every journey deserves a perfect place to rest. BookEase connects you to exceptional hotels with the simplicity and speed you expect from modern technology.
                     </p>
-                    <button onClick={() => { navigate('/rooms'); scrollTo(0, 0); }}
-                        className='mt-8 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-[#85A4E1]/30 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer'>
+                    <div className='mt-10'>
+                    <button onClick={() => { navigate('/rooms'); scrollTo(0, 0); }} className={btnPrimary}>
                         Explore Hotels →
                     </button>
+                    </div>
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* Why BookEase */}
-            <section className='px-6 md:px-16 lg:px-24 py-20 bg-white'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='px-6 md:px-16 lg:px-24 py-20 bg-white'>
                 <div className='text-center mb-14'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>✦ Why Choose Us</p>
                     <h2 className='font-playfair text-3xl md:text-4xl font-bold text-gray-900'>Everything you need, nothing you don't</h2>
@@ -82,10 +87,10 @@ const Experience = () => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* How it works */}
-            <section className='px-6 md:px-16 lg:px-24 py-20 bg-slate-50'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='px-6 md:px-16 lg:px-24 py-20 bg-slate-50'>
                 <div className='text-center mb-14'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>✦ How It Works</p>
                     <h2 className='font-playfair text-3xl md:text-4xl font-bold text-gray-900'>Book in four simple steps</h2>
@@ -93,7 +98,7 @@ const Experience = () => {
                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto'>
                     {steps.map((s, i) => (
                         <div key={i} className='relative bg-white rounded-2xl p-6 shadow-sm text-center'>
-                            <div className='w-12 h-12 rounded-full bg-gradient-to-br from-[#5b7fe8] to-[#85A4E1] text-white font-bold text-lg flex items-center justify-center mx-auto mb-4 shadow-md shadow-[#85A4E1]/30'>
+                            <div className='w-12 h-12 rounded-full bg-[#5b7fe8] text-white font-bold text-lg flex items-center justify-center mx-auto mb-4 shadow-md'>
                                 {s.num}
                             </div>
                             <h3 className='font-bold text-gray-800 mb-2'>{s.title}</h3>
@@ -104,10 +109,10 @@ const Experience = () => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* Stats */}
-            <section className='bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] py-16 px-6 md:px-16 lg:px-24'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='bg-[#5b7fe8] py-16 px-6 md:px-16 lg:px-24'>
                 <div className='max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-white text-center'>
                     {[['10K+','Hotels Listed'],['190+','Cities'],['50K+','Happy Travelers'],['4.9★','Average Rating']].map(([val, label]) => (
                         <div key={label}>
@@ -116,19 +121,18 @@ const Experience = () => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* CTA */}
-            <section className='px-6 md:px-16 lg:px-24 py-20 bg-white text-center'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='px-6 md:px-16 lg:px-24 py-20 bg-white text-center'>
                 <h2 className='font-playfair text-3xl md:text-4xl font-bold text-gray-900'>Ready to find your perfect stay?</h2>
                 <p className='text-gray-500 mt-3 max-w-md mx-auto text-sm leading-relaxed'>
                     Thousands of hotels are waiting. Your next great experience is one search away.
                 </p>
-                <button onClick={() => { navigate('/rooms'); scrollTo(0, 0); }}
-                    className='mt-8 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white font-bold px-10 py-4 rounded-xl shadow-lg shadow-[#85A4E1]/30 hover:shadow-xl hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer text-base'>
+                <button onClick={() => { navigate('/rooms'); scrollTo(0, 0); }} className={`mt-8 ${btnPrimaryLg}`}>
                     Browse Hotels →
                 </button>
-            </section>
+            </AnimateIn>
         </div>
     );
 };

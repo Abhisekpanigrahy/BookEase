@@ -69,7 +69,7 @@ const NewsLetter = () => {
                             <button
                                 type='submit'
                                 disabled={loading}
-                                className='flex items-center justify-center gap-2 bg-gradient-to-r from-[#85A4E1] to-[#6b8fd4] hover:from-[#6b8fd4] hover:to-[#5a7ec3] disabled:opacity-60 text-white px-7 py-3 rounded-xl text-sm font-bold shadow-lg shadow-[#85A4E1]/30 hover:shadow-xl hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 whitespace-nowrap cursor-pointer'>
+                                className='flex items-center justify-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] disabled:opacity-60 text-white px-7 py-3 rounded-xl text-sm font-bold shadow-lg shadow-[#85A4E1]/30 hover:shadow-xl hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 whitespace-nowrap cursor-pointer'>
                                 {loading ? (
                                     <span className='flex items-center gap-2'>
                                         <svg className='w-4 h-4 animate-spin' fill='none' viewBox='0 0 24 24'>

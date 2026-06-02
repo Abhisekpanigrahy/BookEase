@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { assets, facilityIcons } from '../assets/assets'
 import { useSearchParams } from 'react-router-dom'
 import StarRating from '../components/StarRating'
+import AnimateIn from '../components/AnimateIn'
 import { useAppContext } from '../context/AppContext'
 import { RoomListSkeleton } from '../components/Skeleton'
 
@@ -33,7 +34,7 @@ const RadioBtn = ({ label, selected = false, onChange = () => {} }) => (
 
 // ── Room card (horizontal) ────────────────────────────────────────────────────
 const RoomCard = ({ room, navigate, currency }) => (
-    <div className='group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 transition-all duration-300 hover:-translate-y-0.5 flex flex-col md:flex-row'>
+    <AnimateIn as='div' variant='fadeUpSoft' once={false} className='group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 transition-all duration-300 hover:-translate-y-0.5 flex flex-col md:flex-row'>
         {/* Image */}
         <div className='relative overflow-hidden md:w-72 lg:w-80 shrink-0 h-56 md:h-auto cursor-pointer'
             onClick={() => { navigate(`/rooms/${room._id}`); scrollTo(0, 0); }}>
@@ -106,8 +107,8 @@ const RoomCard = ({ room, navigate, currency }) => (
                 </button>
             </div>
         </div>
-    </div>
-);
+        </AnimateIn>
+    );
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 const AllRooms = () => {
@@ -168,7 +169,7 @@ const AllRooms = () => {
     return (
         <div className='min-h-screen bg-gray-50'>
             {/* ── Page header ── */}
-            <div className='bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] pt-28 pb-12 px-6 md:px-16 lg:px-24 xl:px-32'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] pt-28 pb-12 px-6 md:px-16 lg:px-24 xl:px-32'>
                 <div className='max-w-2xl'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-3'>✦ Browse Hotels</p>
                     <h1 className='font-playfair text-3xl md:text-5xl font-bold text-white leading-tight'>
@@ -182,12 +183,12 @@ const AllRooms = () => {
                             : 'Loading available rooms…'}
                     </p>
                 </div>
-            </div>
+            </AnimateIn>
 
             <div className='px-6 md:px-16 lg:px-24 xl:px-32 py-8 flex flex-col lg:flex-row gap-8 items-start'>
 
                 {/* ── Filter sidebar ── */}
-                <aside className='w-full lg:w-72 shrink-0'>
+                <AnimateIn as='aside' variant='fadeUpSoft' className='w-full lg:w-72 shrink-0'>
                     {/* Mobile toggle */}
                     <button
                         onClick={() => setOpenFilters(v => !v)}
@@ -271,10 +272,10 @@ const AllRooms = () => {
                             ))}
                         </div>
                     </div>
-                </aside>
+                </AnimateIn>
 
-                {/* ── Results ── */}
-                <div className='flex-1 min-w-0'>
+                {/* ── Results â”€â”€ */}
+                <AnimateIn as='div' variant='fadeUpSoft' className='flex-1 min-w-0'>
                     {/* Active filter pills */}
                     {(selectedFilters.roomType.length > 0 || selectedFilters.priceRange.length > 0 || selectedSort) && (
                         <div className='flex flex-wrap gap-2 mb-5'>
@@ -317,7 +318,7 @@ const AllRooms = () => {
                                 ))
                         }
                     </div>
-                </div>
+                </AnimateIn>
             </div>
         </div>
     );

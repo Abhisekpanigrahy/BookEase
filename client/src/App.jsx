@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './components/Navbar'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import Home        from './pages/Home';
 import Footer      from './components/Footer';
 import AllRooms    from './pages/AllRooms';
@@ -16,9 +17,11 @@ import ListRoom    from './pages/hotelOwner/ListRoom';
 import Loader      from './components/Loader';
 import { Toaster } from 'react-hot-toast';
 import { useAppContext } from './context/AppContext';
+import AnimateIn, { PageTransition } from './components/AnimateIn';
 
 const App = () => {
-    const isOwnerPath   = useLocation().pathname.includes("owner");
+    const location = useLocation();
+    const isOwnerPath = location.pathname.includes('owner');
     const { showHotelReg } = useAppContext();
 
     return (
@@ -30,22 +33,24 @@ const App = () => {
             {showHotelReg && <HotelReg />}
 
             <div className='min-h-[70vh]'>
-                <Routes>
-                    <Route path='/'           element={<Home />} />
-                    <Route path='/rooms'      element={<AllRooms />} />
-                    <Route path='/rooms/:id'  element={<RoomDetails />} />
-                    <Route path='/my-bookings' element={<MyBookings />} />
-                    <Route path='/experience' element={<Experience />} />
-                    <Route path='/about'      element={<About />} />
-                    <Route path='/loader/:nextUrl' element={<Loader />} />
+                <AnimatePresence mode='wait' initial={false}>
+                    <Routes location={location} key={location.pathname}>
+                        <Route path='/'           element={<PageTransition className='min-h-full'><Home /></PageTransition>} />
+                        <Route path='/rooms'      element={<PageTransition className='min-h-full'><AllRooms /></PageTransition>} />
+                        <Route path='/rooms/:id'  element={<PageTransition className='min-h-full'><RoomDetails /></PageTransition>} />
+                        <Route path='/my-bookings' element={<PageTransition className='min-h-full'><MyBookings /></PageTransition>} />
+                        <Route path='/experience' element={<PageTransition className='min-h-full'><Experience /></PageTransition>} />
+                        <Route path='/about'      element={<PageTransition className='min-h-full'><About /></PageTransition>} />
+                        <Route path='/loader/:nextUrl' element={<PageTransition className='min-h-full'><Loader /></PageTransition>} />
 
-                    {/* Owner dashboard */}
-                    <Route path='/owner' element={<Layout />}>
-                        <Route index         element={<Dashboard />} />
-                        <Route path='add-room'  element={<AddRoom />} />
-                        <Route path='list-room' element={<ListRoom />} />
-                    </Route>
-                </Routes>
+                        {/* Owner dashboard */}
+                        <Route path='/owner' element={<Layout />}>
+                            <Route index         element={<Dashboard />} />
+                            <Route path='add-room'  element={<AddRoom />} />
+                            <Route path='list-room' element={<ListRoom />} />
+                        </Route>
+                    </Routes>
+                </AnimatePresence>
             </div>
 
             {!isOwnerPath && <Footer />}

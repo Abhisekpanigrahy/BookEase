@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { assets, facilityIcons, roomCommonData } from '../assets/assets';
+import AnimateIn from '../components/AnimateIn';
 import StarRating from '../components/StarRating';
 import { useAppContext } from '../context/AppContext';
 import toast from 'react-hot-toast';
@@ -48,7 +49,7 @@ const RoomDetails = () => {
     }, [rooms]);
 
     return room && (
-        <div className='py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32'>
+        <AnimateIn as='div' variant='fadeUpSoft' className='py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32'>
             <div className='flex flex-col md:flex-row items-start md:items-center gap-2'>
                 <h1 className='text-3xl md:text-4xl font-playfair'>{room.hotel.name}
                     <span className='font-inter text-sm ml-2'>({room.roomType})</span></h1>
@@ -154,7 +155,7 @@ const RoomDetails = () => {
                     Contact Now
                 </button>
             </div>
-        </div>
+        </AnimateIn>
     );
 };
 

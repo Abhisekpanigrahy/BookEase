@@ -1,4 +1,5 @@
 import React from 'react'
+import AnimateIn from '../components/AnimateIn'
 import { useAppContext } from '../context/AppContext'
 
 const features = [
@@ -37,10 +38,10 @@ const About = () => {
     const { navigate } = useAppContext();
 
     return (
-        <div className='pt-20'>
+        <div>
 
             {/* ── Hero ─────────────────────────────────────────────── */}
-            <section className='relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] py-28 px-6 md:px-16 lg:px-24 overflow-hidden'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] pt-36 pb-28 px-6 md:px-16 lg:px-24 overflow-hidden'>
                 <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,rgba(91,127,232,0.18),transparent_65%)] pointer-events-none' />
                 <div className='relative z-10 max-w-4xl mx-auto text-center text-white'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-4'>✦ About BookEase</p>
@@ -62,10 +63,10 @@ const About = () => {
                         </button>
                     </div>
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* ── Stats ────────────────────────────────────────────── */}
-            <section className='bg-white px-6 md:px-16 lg:px-24 py-14'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='bg-white px-6 md:px-16 lg:px-24 py-14'>
                 <div className='max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center'>
                     {[['10K+','Hotels Listed'],['190+','Cities'],['50K+','Happy Travelers'],['4.9★','Average Rating']].map(([val, label]) => (
                         <div key={label} className='flex flex-col items-center'>
@@ -74,10 +75,10 @@ const About = () => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* ── What is BookEase ─────────────────────────────────── */}
-            <section className='bg-slate-50 px-6 md:px-16 lg:px-24 py-20'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='bg-slate-50 px-6 md:px-16 lg:px-24 py-20'>
                 <div className='max-w-5xl mx-auto flex flex-col lg:flex-row gap-14 items-center'>
                     <div className='lg:w-1/2'>
                         <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-3'>✦ What We Do</p>
@@ -107,10 +108,10 @@ const About = () => {
                         />
                     </div>
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* ── Features ─────────────────────────────────────────── */}
-            <section className='bg-white px-6 md:px-16 lg:px-24 py-20'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='bg-white px-6 md:px-16 lg:px-24 py-20'>
                 <div className='text-center mb-14'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>✦ Platform Features</p>
                     <h2 className='font-playfair text-3xl md:text-4xl font-bold text-gray-900'>Everything built in</h2>
@@ -127,10 +128,10 @@ const About = () => {
                         </div>
                     ))}
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* ── Journey / Timeline ───────────────────────────────── */}
-            <section className='bg-slate-50 px-6 md:px-16 lg:px-24 py-20'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='bg-slate-50 px-6 md:px-16 lg:px-24 py-20'>
                 <div className='text-center mb-14'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>✦ Our Journey</p>
                     <h2 className='font-playfair text-3xl md:text-4xl font-bold text-gray-900'>How BookEase grew</h2>
@@ -138,17 +139,17 @@ const About = () => {
                 <div className='max-w-2xl mx-auto space-y-4'>
                     {milestones.map((m, i) => (
                         <div key={i} className='flex gap-5 items-start bg-white rounded-2xl p-5 shadow-sm border border-gray-100'>
-                            <div className='shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-[#5b7fe8] to-[#85A4E1] flex items-center justify-center shadow-md shadow-[#85A4E1]/25'>
+                            <div className='shrink-0 w-14 h-14 rounded-xl bg-[#5b7fe8] flex items-center justify-center shadow-md'>
                                 <span className='text-white text-xs font-bold text-center leading-tight'>{m.year}</span>
                             </div>
                             <p className='text-gray-700 text-sm leading-relaxed font-medium self-center'>{m.event}</p>
                         </div>
                     ))}
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* ── Tech Stack ───────────────────────────────────────── */}
-            <section className='bg-white px-6 md:px-16 lg:px-24 py-16'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='bg-white px-6 md:px-16 lg:px-24 py-16'>
                 <div className='text-center mb-10'>
                     <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>✦ Built With</p>
                     <h2 className='font-playfair text-2xl md:text-3xl font-bold text-gray-900'>Technology Stack</h2>
@@ -161,10 +162,10 @@ const About = () => {
                         </span>
                     ))}
                 </div>
-            </section>
+            </AnimateIn>
 
             {/* ── CTA ──────────────────────────────────────────────── */}
-            <section className='relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] px-6 md:px-16 lg:px-24 py-20 overflow-hidden'>
+            <AnimateIn as='section' variant='fadeUpSoft' className='relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] px-6 md:px-16 lg:px-24 py-20 overflow-hidden'>
                 <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(91,127,232,0.12),transparent_70%)] pointer-events-none' />
                 <div className='relative z-10 text-center text-white max-w-2xl mx-auto'>
                     <h2 className='font-playfair text-3xl md:text-4xl font-bold'>Ready to explore?</h2>
@@ -182,7 +183,7 @@ const About = () => {
                         </button>
                     </div>
                 </div>
-            </section>
+            </AnimateIn>
         </div>
     );
 };

@@ -42,7 +42,7 @@ const AddRoom = () => {
             <Title align='left' font='outfit' title='Add Room' subTitle='Fill in the details carefully and accurately to enhance the user booking experience.' />
 
             <p className='text-gray-700 font-medium mt-10 mb-2'>Room Images</p>
-            <div className='grid grid-cols-2 sm:flex gap-4 flex-wrap'>
+            <div className='flex flex-wrap gap-4'>
                 {Object.keys(images).map(key => (
                     <label key={key} htmlFor={`roomImage${key}`}
                         className={`relative h-24 w-24 rounded-xl border-2 border-dashed flex items-center justify-center cursor-pointer overflow-hidden transition-all duration-200 ${images[key] ? 'border-[#85A4E1]' : 'border-gray-300 hover:border-[#85A4E1] hover:bg-[#85A4E1]/5'}`}>
@@ -84,7 +84,7 @@ const AddRoom = () => {
             </div>
 
             <button type='submit' disabled={loading}
-                className='mt-10 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white text-sm font-bold px-8 py-3 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0'>
+                className='mt-10 inline-flex items-center justify-center gap-2 bg-[#5b7fe8] hover:bg-[#4a6edb] text-white text-sm font-bold px-8 py-3 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0'>
                 {loading
                     ? <><svg className='w-4 h-4 animate-spin' fill='none' viewBox='0 0 24 24'><circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'/><path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v8z'/></svg> Adding…</>
                     : '+ Add Room'

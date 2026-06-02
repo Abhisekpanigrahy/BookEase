@@ -58,6 +58,7 @@ const Navbar = () => {
     );
 
     return (
+        <>
         <nav className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50
             ${isScrolled ? "bg-white/90 shadow-md backdrop-blur-lg py-3 md:py-4" : "py-4 md:py-6"}`}>
 
@@ -103,7 +104,7 @@ const Navbar = () => {
                     </UserButton>
                 ) : (
                     <button onClick={openSignIn}
-                        className="ml-2 text-sm font-bold text-white bg-gradient-to-r from-gray-900 to-gray-700 hover:from-gray-700 hover:to-gray-900 px-7 py-2.5 rounded-full shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer">
+                        className="ml-2 text-sm font-bold text-white bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] px-7 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer">
                         Login
                     </button>
                 )}
@@ -122,45 +123,46 @@ const Navbar = () => {
                     <img src={assets.menuIcon} alt="menu" className={`${isScrolled ? 'invert' : ''} h-5`} />
                 </button>
             </div>
-
-            {/* Mobile drawer */}
-            <div className={`fixed inset-0 bg-white flex flex-col md:hidden items-center justify-center gap-7 font-medium transition-all duration-500 z-50
-                ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-                <button className="absolute top-5 right-5 p-2" onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
-                    <img src={assets.closeIcon} alt="close" className="h-5" />
-                </button>
-
-                <Logo variant='dark' />
-
-                {navLinks.map((link) => (
-                    <NavLink
-                        key={link.path}
-                        to={link.path}
-                        end={link.path === '/'}
-                        onClick={() => { setIsMenuOpen(false); scrollTo(0, 0); }}
-                        className={({ isActive }) =>
-                            `text-base font-medium transition-colors ${isActive ? 'text-[#5b7fe8]' : 'text-gray-700 hover:text-[#85A4E1]'}`
-                        }>
-                        {link.name}
-                    </NavLink>
-                ))}
-
-                {authReady && user && (
-                    <button
-                        className="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer"
-                        onClick={() => { isOwner ? navigate('/owner') : setShowHotelReg(true); setIsMenuOpen(false); }}>
-                        {isOwner ? 'Dashboard' : 'List Your Hotel'}
-                    </button>
-                )}
-
-                {authReady && !user && (
-                    <button onClick={openSignIn}
-                        className="text-sm font-bold text-white bg-gradient-to-r from-gray-900 to-gray-700 hover:from-gray-700 hover:to-gray-900 px-8 py-3 rounded-full shadow-md active:scale-95 transition-all duration-200 cursor-pointer">
-                        Login
-                    </button>
-                )}
-            </div>
         </nav>
+
+        {/* Mobile drawer — rendered outside <nav> so it truly covers the full viewport */}
+        <div className={`fixed inset-0 bg-white flex flex-col md:hidden items-center justify-center gap-7 font-medium transition-all duration-500 z-[999]
+            ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+            <button className="absolute top-5 right-5 p-2" onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
+                <img src={assets.closeIcon} alt="close" className="h-5" />
+            </button>
+
+            <Logo variant='dark' />
+
+            {navLinks.map((link) => (
+                <NavLink
+                    key={link.path}
+                    to={link.path}
+                    end={link.path === '/'}
+                    onClick={() => { setIsMenuOpen(false); scrollTo(0, 0); }}
+                    className={({ isActive }) =>
+                        `text-base font-medium transition-colors ${isActive ? 'text-[#5b7fe8]' : 'text-gray-700 hover:text-[#85A4E1]'}`
+                    }>
+                    {link.name}
+                </NavLink>
+            ))}
+
+            {authReady && user && (
+                <button
+                    className="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-all duration-200 active:scale-95 cursor-pointer"
+                    onClick={() => { isOwner ? navigate('/owner') : setShowHotelReg(true); setIsMenuOpen(false); }}>
+                    {isOwner ? 'Dashboard' : 'List Your Hotel'}
+                </button>
+            )}
+
+            {authReady && !user && (
+                <button onClick={openSignIn}
+                    className="text-sm font-bold text-white bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] px-8 py-3 rounded-xl shadow-md shadow-[#85A4E1]/30 active:scale-95 transition-all duration-200 cursor-pointer">
+                    Login
+                </button>
+            )}
+        </div>
+        </>
     );
 };
 
