@@ -1,8 +1,11 @@
 import React from 'react'
 import { assets, exclusiveOffers } from '../assets/assets'
 import AnimateIn, { StaggerContainer, StaggerItem } from './AnimateIn'
+import { useAppContext } from '../context/AppContext'
 
 const ExclusiveOffer = () => {
+    const { navigate } = useAppContext();
+
     return (
         <section className='px-6 md:px-16 lg:px-24 py-20 bg-white'>
             {/* Header */}
@@ -18,7 +21,9 @@ const ExclusiveOffer = () => {
                         Limited-time packages designed to enhance your stay and create unforgettable memories.
                     </p>
                 </div>
-                <button className='shrink-0 inline-flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 cursor-pointer'>
+                <button 
+                    onClick={() => { navigate('/offers'); scrollTo(0, 0); }}
+                    className='shrink-0 inline-flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 cursor-pointer'>
                     View All Offers
                     <span className='text-base leading-none'>→</span>
                 </button>
@@ -29,6 +34,7 @@ const ExclusiveOffer = () => {
                 {exclusiveOffers.map((item) => (
                     <StaggerItem key={item._id} variant='scaleUp'>
                         <div
+                            onClick={() => { navigate('/offers'); scrollTo(0, 0); }}
                             className='group relative rounded-2xl overflow-hidden h-72 cursor-pointer'
                             style={{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 transition-all duration-300' />

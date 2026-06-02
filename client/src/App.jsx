@@ -9,6 +9,7 @@ import RoomDetails from './pages/RoomDetails';
 import MyBookings  from './pages/MyBookings';
 import Experience  from './pages/Experience';
 import About       from './pages/About';
+import Offers      from './pages/Offers';
 import HotelReg    from './components/HotelReg';
 import Layout      from './pages/hotelOwner/Layout';
 import Dashboard   from './pages/hotelOwner/Dashboard';
@@ -41,6 +42,7 @@ const App = () => {
                         <Route path='/my-bookings' element={<PageTransition className='min-h-full'><MyBookings /></PageTransition>} />
                         <Route path='/experience' element={<PageTransition className='min-h-full'><Experience /></PageTransition>} />
                         <Route path='/about'      element={<PageTransition className='min-h-full'><About /></PageTransition>} />
+                        <Route path='/offers'     element={<PageTransition className='min-h-full'><Offers /></PageTransition>} />
                         <Route path='/loader/:nextUrl' element={<PageTransition className='min-h-full'><Loader /></PageTransition>} />
 
                         {/* Owner dashboard */}
