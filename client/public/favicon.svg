@@ -1,4 +1,14 @@
-<svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="33" height="33" rx="8" fill="#85A4E1"/>
-  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="700" fill="white">BE</text>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background square -->
+  <rect width="32" height="32" rx="7" fill="#5b7fe8"/>
+  <!-- Roof -->
+  <polygon points="16,5 28,15 4,15" fill="white" opacity="0.95"/>
+  <!-- Building body -->
+  <rect x="6" y="15" width="20" height="12" rx="1" fill="white" opacity="0.90"/>
+  <!-- Door -->
+  <rect x="12" y="19" width="8" height="8" rx="1.5" fill="#5b7fe8"/>
+  <!-- Left window -->
+  <rect x="7.5" y="17" width="5" height="4" rx="1" fill="#5b7fe8" opacity="0.65"/>
+  <!-- Right window -->
+  <rect x="19.5" y="17" width="5" height="4" rx="1" fill="#5b7fe8" opacity="0.65"/>
 </svg>

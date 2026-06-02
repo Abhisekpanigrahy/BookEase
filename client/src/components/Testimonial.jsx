@@ -1,41 +1,59 @@
 import React from 'react'
-import Title from './Title'
 import { testimonials } from '../assets/assets'
 import StarRating from './StarRating'
 
 const Testimonial = () => {
-  return (
-    <div className='flex flex-col items-center px-6 md:px-16 lg:px-24 bg-slate-50 pt-20 pb-30'>
-      
-      <Title 
-        title='What Our Guests Say' 
-        subTitle='Discover why discerning travelers consistently choose BookEase for their exclusive and luxurious accommodations around the world.'
-
-      />
-
-      {/* Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-20 w-full">
-        {testimonials.map((testimonial) => (
-          <div key={testimonial.id} className="bg-white p-6 rounded-xl shadow">
-            <div className="flex items-center gap-3">
-              <img className="w-12 h-12 rounded-full" src={testimonial.image} alt={testimonial.name} />
-              <div>
-                <p className="font-playfair text-xl">{testimonial.name}</p>
-                <p className="text-gray-500">{testimonial.address}</p>
-              </div>
+    return (
+        <section className='px-6 md:px-16 lg:px-24 py-20 bg-slate-50'>
+            {/* Header */}
+            <div className='flex flex-col items-center text-center mb-12'>
+                <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>
+                    ✦ Guest Reviews
+                </p>
+                <h2 className='font-playfair text-3xl md:text-4xl font-bold text-gray-900'>
+                    What Our Guests Say
+                </h2>
+                <p className='text-gray-500 mt-2 max-w-lg text-sm leading-relaxed'>
+                    Discover why discerning travelers consistently choose BookEase for their exclusive and luxurious accommodations around the world.
+                </p>
             </div>
 
-            <div className="flex items-center gap-1 mt-4">
-              <StarRating />
+            {/* Cards */}
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+                {testimonials.map((testimonial) => (
+                    <div key={testimonial.id}
+                        className='bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col gap-4'>
+
+                        {/* Quote mark */}
+                        <span className='text-5xl text-[#85A4E1]/30 font-serif leading-none'>"</span>
+
+                        {/* Review */}
+                        <p className='text-gray-600 text-sm leading-relaxed -mt-4'>
+                            {testimonial.review}
+                        </p>
+
+                        {/* Stars */}
+                        <div className='flex items-center gap-0.5'>
+                            <StarRating />
+                        </div>
+
+                        {/* Author */}
+                        <div className='flex items-center gap-3 pt-3 border-t border-gray-100 mt-auto'>
+                            <img
+                                className='w-10 h-10 rounded-full object-cover ring-2 ring-[#85A4E1]/30'
+                                src={testimonial.image}
+                                alt={testimonial.name}
+                            />
+                            <div>
+                                <p className='font-semibold text-gray-800 text-sm'>{testimonial.name}</p>
+                                <p className='text-gray-400 text-xs'>{testimonial.address}</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
+        </section>
+    );
+};
 
-            <p className="text-gray-500 max-w-90 mt-4">"{testimonial.review}"</p>
-          </div>
-        ))}
-      </div>
-
-    </div>
-  )
-}
-
-export default Testimonial
+export default Testimonial;

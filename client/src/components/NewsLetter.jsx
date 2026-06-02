@@ -1,23 +1,103 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { assets } from '../assets/assets'
-import Title from './Title'
+import { useAppContext } from '../context/AppContext'
+import { toast } from 'react-hot-toast'
 
 const NewsLetter = () => {
-  return (
-    <div className="flex flex-col items-center max-w-5xl lg:w-full rounded-2xl px-4 py-12 md:py-16 mx-2 lg:mx-auto my-30 bg-gray-900 text-white">
+    const { axios } = useAppContext();
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
-        <Title title="Stay Inspired" subTitle="Join our newsletter and be the first to discover new destinations, exclusive offers, and travel inspiration."/>
-            
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-6">
-                <input type="text" className="bg-white/10 px-4 py-2.5 border border-white/20 rounded outline-none max-w-66 w-full" placeholder="Enter your email" />
-                <button className="flex items-center justify-center gap-2 group bg-black px-4 md:px-7 py-2.5 rounded active:scale-95 transition-all">Subscribe
-                    <img src={assets.arrowIcon} alt="arrow-icon" className='w-3.5 invert group-hover:translate-x-1 transition-all' />
-                </button>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setLoading(true);
+        try {
+            const { data } = await axios.post('/api/newsletter/subscribe', { email });
+            if (data.success) {
+                setSubmitted(true);
+                toast.success('You\'re subscribed! Check your inbox 🎉');
+            } else {
+                toast.error(data.message || 'Something went wrong. Please try again.');
+            }
+        } catch (err) {
+            toast.error(err.message || 'Subscription failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <section className='px-6 md:px-16 lg:px-24 py-20 bg-white'>
+            <div className='relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] rounded-3xl px-8 md:px-16 py-16 overflow-hidden'>
+
+                {/* Decorative blobs */}
+                <div className='absolute top-0 right-0 w-96 h-96 bg-[#85A4E1]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none' />
+                <div className='absolute bottom-0 left-0 w-72 h-72 bg-[#85A4E1]/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none' />
+                <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(133,164,225,0.05)_0%,transparent_70%)] pointer-events-none' />
+
+                <div className='relative z-10 flex flex-col items-center text-center'>
+                    <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-3'>
+                        ✦ Stay in the Loop
+                    </p>
+                    <h2 className='font-playfair text-3xl md:text-4xl font-bold text-white max-w-xl leading-tight'>
+                        Get Exclusive Deals &amp; Travel Inspiration
+                    </h2>
+                    <p className='text-white/60 text-sm mt-3 max-w-md leading-relaxed'>
+                        Join 50,000+ travelers who receive our weekly curated deals, destination guides, and members-only offers.
+                    </p>
+
+                    {submitted ? (
+                        <div className='mt-8 bg-white/10 border border-white/20 rounded-2xl px-10 py-6 text-white'>
+                            <p className='text-2xl mb-1'>🎉</p>
+                            <p className='text-lg font-playfair font-semibold'>You&apos;re subscribed!</p>
+                            <p className='text-sm text-white/60 mt-1'>Check your inbox for a welcome surprise.</p>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-3 mt-8 w-full max-w-md'>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                required
+                                disabled={loading}
+                                className='flex-1 bg-white/10 border border-white/20 text-white placeholder:text-white/40 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#85A4E1] transition-colors disabled:opacity-60'
+                                placeholder='Enter your email address'
+                            />
+                            <button
+                                type='submit'
+                                disabled={loading}
+                                className='flex items-center justify-center gap-2 bg-gradient-to-r from-[#85A4E1] to-[#6b8fd4] hover:from-[#6b8fd4] hover:to-[#5a7ec3] disabled:opacity-60 text-white px-7 py-3 rounded-xl text-sm font-bold shadow-lg shadow-[#85A4E1]/30 hover:shadow-xl hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 whitespace-nowrap cursor-pointer'>
+                                {loading ? (
+                                    <span className='flex items-center gap-2'>
+                                        <svg className='w-4 h-4 animate-spin' fill='none' viewBox='0 0 24 24'>
+                                            <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
+                                            <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v8z' />
+                                        </svg>
+                                        Subscribing…
+                                    </span>
+                                ) : (
+                                    <>
+                                        Subscribe
+                                        <img src={assets.arrowIcon} alt="" className='w-3 invert' />
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    )}
+
+                    {/* Trust row */}
+                    <div className='flex flex-wrap items-center justify-center gap-6 mt-8 text-white/40 text-xs'>
+                        <span>✓ No spam, ever</span>
+                        <span>✓ Unsubscribe anytime</span>
+                        <span>✓ 50K+ subscribers</span>
+                    </div>
+                </div>
             </div>
-            <p className="text-gray-500 mt-6 text-xs text-center">By subscribing, you agree to our Privacy Policy and consent to receive updates.</p>
-        </div>
+        </section>
+    );
+};
 
-  )
-}
-
-export default NewsLetter
+export default NewsLetter;

@@ -4,86 +4,72 @@ import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast';
 
 const HotelReg = () => {
+    const { setShowHotelReg, axios, getToken, setIsOwner } = useAppContext();
+    const [name, setName]       = useState("");
+    const [address, setAddress] = useState("");
+    const [contact, setContact] = useState("");
+    const [city, setCity]       = useState("");
+    const [loading, setLoading] = useState(false);
 
-  const {setShowHotelReg, axios, getToken, setIsOwner} = useAppContext();
-
-  // To store the form data
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [contact, setContact] = useState("");
-  const [city, setCity] = useState("");
-
-  // onSubmitHandler function
-  const onSubmitHandler = async (event) => {
-    try {
-        // To prevent the web page from reloading when submitting the form
+    const onSubmitHandler = async (event) => {
         event.preventDefault();
-        // API calls to register the hotel
-        const {data} = await axios.post(`/api/hotels/`, {name, contact, address, city}, {headers: {Authorization: `Bearer ${await getToken()}`}})
-        // Checking the data
-        if(data.success){
-            toast.success(data.message)
-            setIsOwner(true)
-            // Hidding the Reg form
-            setShowHotelReg(false);
-        } else {
-            toast.error(data.message)
-        }
-    } catch (error) {
-        toast.error(error.message)
-    }
-  }
+        setLoading(true);
+        try {
+            const { data } = await axios.post('/api/hotels/', { name, contact, address, city }, { headers: { Authorization: `Bearer ${await getToken()}` } });
+            if (data.success) { toast.success(data.message); setIsOwner(true); setShowHotelReg(false); }
+            else toast.error(data.message);
+        } catch (error) { toast.error(error.message); }
+        finally { setLoading(false); }
+    };
 
-  return (
-    <div onClick={()=>setShowHotelReg(false)} className='fixed top-0 bottom-0 left-0 right-0 z-100 flex items-center justify-center bg-black/70'>
-      <form onSubmit={onSubmitHandler} onClick={(e)=>e.stopPropagation()} className='flex bg-white rounded-xl max-w-4xl max-md:mx-2'>
-        <img src={assets.regImage} alt="reg-image" className='w-1/2 rounded-xl hidden md:block'/>
+    const inputCls = 'border border-gray-200 rounded-xl w-full px-3 py-2.5 mt-1 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all font-light';
 
-        <div className='relative flex flex-col items-center md:w-1/2 p-8 md:p-10'>
-            <img src={assets.closeIcon} alt="close-icon" className='absolute top-4 right-4 h-4 w-4 cursor-pointer' onClick={ () => setShowHotelReg(false) }/>
-            <p className='text-2xl font-semibold mt-6'>Register Your Hotel</p>
+    return (
+        <div onClick={() => setShowHotelReg(false)}
+            className='fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
+            <form onSubmit={onSubmitHandler} onClick={e => e.stopPropagation()}
+                className='flex bg-white rounded-2xl overflow-hidden max-w-3xl w-full max-md:mx-4 shadow-2xl'>
+                <img src={assets.regImage} alt="register" className='w-1/2 rounded-xl hidden md:block object-cover' />
 
-            {/* Hotel Name  */}
-            <div className='w-full mt-4'>
-                <label htmlFor="name" className='font-medium text-gray-500'>
-                    Hotel Name
-                </label>
-                <input id='name' onChange={(e)=>setName(e.target.value)} value={name} type="text" placeholder='Type here' className='border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light' required/>
-            </div>
-            {/* Phone */}
-            <div className='w-full mt-4'>
-                <label htmlFor="contact" className='font-medium text-gray-500'>
-                    Phone
-                </label>
-                <input id='contact' onChange={(e)=>setContact(e.target.value)} value={contact} type="text" placeholder='Type here' className='border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light' required/>
-            </div>
-            {/* Address */}
-            <div className='w-full mt-4'>
-                <label htmlFor="address" className='font-medium text-gray-500'>
-                    Address
-                </label>
-                <input id='address' onChange={(e)=>setAddress(e.target.value)} value={address} type="text" placeholder='Type here' className='border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light' required/>
-            </div>
-            {/* Select City Drop Down  */}
-            <div className='w-full mt-4 max-w-60 mr-auto'>
-                <label htmlFor="city" className='font-medium text-gray-500'>
-                    City
-                </label>
-                <select id="city" onChange={(e)=>setCity(e.target.value)} value={city} className='border border-gray-200 rounded w-full px-3 py-2.5 mt-1 outline-indigo-500 font-light' required>
-                    <option value="">Select City</option>
-                    {cities.map((city)=>(
-                        <option key={city} value={city}>{city}</option>
+                <div className='relative flex flex-col items-center md:w-1/2 p-8 md:p-10'>
+                    <button type='button' onClick={() => setShowHotelReg(false)}
+                        className='absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer'>
+                        <img src={assets.closeIcon} alt="close" className='h-4 w-4' />
+                    </button>
+
+                    <p className='text-2xl font-bold text-gray-800 mt-6'>Register Your Hotel</p>
+                    <p className='text-sm text-gray-500 mt-1 text-center'>Fill in your property details to get started</p>
+
+                    {[
+                        { id: 'name',    label: 'Hotel Name', value: name,    set: setName,    type: 'text' },
+                        { id: 'contact', label: 'Phone',      value: contact, set: setContact, type: 'text' },
+                        { id: 'address', label: 'Address',    value: address, set: setAddress, type: 'text' },
+                    ].map(f => (
+                        <div key={f.id} className='w-full mt-4'>
+                            <label htmlFor={f.id} className='text-xs font-semibold text-gray-500 uppercase tracking-wider'>{f.label}</label>
+                            <input id={f.id} type={f.type} value={f.value} onChange={e => f.set(e.target.value)} placeholder='Type here' className={inputCls} required />
+                        </div>
                     ))}
-                </select>
-            </div>
-            <button className='bg-indigo-500 hover:bg-indigo-600 transition-all text-white mr-auto px-6 py-2 rounded cursor-pointer mt-6'>
-                Register
-            </button>
 
+                    <div className='w-full mt-4'>
+                        <label htmlFor="city" className='text-xs font-semibold text-gray-500 uppercase tracking-wider'>City</label>
+                        <select id="city" value={city} onChange={e => setCity(e.target.value)} className={inputCls} required>
+                            <option value="">Select City</option>
+                            {cities.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
+
+                    <button type='submit' disabled={loading}
+                        className='w-full mt-7 flex items-center justify-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white text-sm font-bold py-3 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:hover:translate-y-0'>
+                        {loading
+                            ? <><svg className='w-4 h-4 animate-spin' fill='none' viewBox='0 0 24 24'><circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'/><path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v8z'/></svg> Registering…</>
+                            : 'Register Hotel →'
+                        }
+                    </button>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  )
-}
+    );
+};
 
-export default HotelReg
+export default HotelReg;

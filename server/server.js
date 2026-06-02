@@ -11,6 +11,7 @@ import connectCloudinary from "./configs/cloudinary.js";
 import roomRouter from "./routes/roomRoute.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
+import newsletterRouter from "./routes/newsletterRoute.js";
 
 dotenv.config();
 
@@ -42,6 +43,8 @@ app.use('/api/hotels', hotelRouter)
 app.use('/api/rooms', roomRouter)
 // 5th Route ( Booking Route )
 app.use('/api/bookings', bookingRouter)
+// 6th Route ( Newsletter Route )
+app.use('/api/newsletter', newsletterRouter)
 
 // Port for running
 const PORT = process.env.PORT || 3000;

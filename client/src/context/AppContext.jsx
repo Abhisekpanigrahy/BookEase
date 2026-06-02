@@ -1,90 +1,82 @@
-// 1st importing backend url from the env - to use it for backend API call
-// Using axios package for api call
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { toast } from 'react-hot-toast';
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
-// For creating AppContext -> createContext hook is used
+// Shared in-flight request deduplicator — prevents double-fetching on StrictMode
+const inflight = {};
+const dedupe = (key, fn) => {
+    if (!inflight[key]) inflight[key] = fn().finally(() => { delete inflight[key]; });
+    return inflight[key];
+};
+
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-
-    const currency = import.meta.env.VITE_CURRENCY || "$";
-    const navigate = useNavigate();
-    // Getting user from the clerk
-    const {user} = useUser();
-    // Extracting token 
+    const currency  = import.meta.env.VITE_CURRENCY || "$";
+    const navigate  = useNavigate();
+    const { user, isLoaded: userLoaded }  = useUser();   // isLoaded = Clerk has resolved
     const { getToken } = useAuth();
 
-    // State Variables
-    const [isOwner, setIsOwner] = useState(false);
-    const [showHotelReg, setShowHotelReg] = useState(false);
+    const [isOwner,       setIsOwner]       = useState(false);
+    const [showHotelReg,  setShowHotelReg]  = useState(false);
     const [searchedCities, setSearchedCities] = useState([]);
-    const [rooms, setRooms] = useState([]);
+    const [rooms,         setRooms]         = useState([]);
 
-    // Function to fetch data from API and store in rooms state()
-    const fetchRooms = async () => {
+    // ─── Rooms: serve from sessionStorage cache immediately, revalidate silently ───
+    const fetchRooms = () => dedupe('rooms', async () => {
         try {
-            // API call
-            const { data } = await axios.get('/api/rooms')
-            // Checking response data
-            if (data.success) {
-                setRooms(data.rooms)
-            } else {
-                toast.error(data.message)
+            const cached = sessionStorage.getItem('be_rooms');
+            if (cached) {
+                setRooms(JSON.parse(cached));          // instant render from cache
             }
-        } catch (error) {
-            toast.error(error.message)
-        }
-    }
+            // always revalidate in background (stale-while-revalidate)
+            const { data } = await axios.get('/api/rooms');
+            if (data.success) {
+                setRooms(data.rooms);
+                sessionStorage.setItem('be_rooms', JSON.stringify(data.rooms));
+            }
+        } catch (_) { /* silent — rooms cached, no toast needed */ }
+    });
 
-    // Function to fetch users and also check user roles
+    // ─── User profile: get token and user data in parallel ───────────────────────
     const fetchUser = async () => {
         try {
-            // Making API call
-            const {data} = await axios.get('/api/user', {headers: {Authorization: `Bearer ${await getToken()}`}})
-            // Checking the data
-            if(data.success){
-                setIsOwner(data.role === "hotelOwner")
-                setSearchedCities(data.recentSearchedCities)
-            } else {
-                // Retry Fetching  User Details after 5 seconds
-                setTimeout(() => {
-                    fetchUser()
-                }, 5000);
+            const token = await getToken();
+            if (!token) return;
+            const { data } = await axios.get('/api/user', {
+                headers: { Authorization: `Bearer ${token}` },
+                timeout: 8000,
+            });
+            if (data.success) {
+                setIsOwner(data.role === 'hotelOwner');
+                setSearchedCities(data.recentSearchedCities || []);
             }
-        } catch (error) {
-            // Toast Notification
-            toast.error(error.message)
-        }
-    }
+        } catch (_) { /* silent — not critical for page render */ }
+    };
 
-    // Executing fetchUser function - whenever the component gets loaded
-    useEffect(() => {
-        if(user){
-            fetchUser();
-        }
-    },[user])
+    // Fire rooms fetch immediately on mount (no auth needed)
+    useEffect(() => { fetchRooms(); }, []);
 
-    // Executing fetchRooms function - whenever the component gets loaded
-    useEffect(() => {
-        fetchRooms()
-    },[])
+    // Fire user fetch as soon as Clerk user is ready
+    useEffect(() => { if (user) fetchUser(); }, [user]);
 
-    // Value Object
     const value = {
-        currency, navigate, user, getToken, isOwner, setIsOwner, axios, showHotelReg, setShowHotelReg,searchedCities, setSearchedCities, rooms, setRooms
-    }
+        currency, navigate, axios, toast,
+        // expose undefined while Clerk is still loading so consumers can show a skeleton
+        user: userLoaded ? user : undefined,
+        getToken,
+        isOwner,  setIsOwner,
+        showHotelReg, setShowHotelReg,
+        searchedCities, setSearchedCities,
+        rooms,    setRooms,
+        fetchRooms,
+    };
 
-    return (
-        <AppContext.Provider value={value}>
-            { children }
-        </AppContext.Provider>
-    )
-}
+    return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+};
 
-export const useAppContext = () => useContext(AppContext)
+export const useAppContext = () => useContext(AppContext);

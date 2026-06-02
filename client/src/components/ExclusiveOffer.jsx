@@ -1,37 +1,60 @@
 import React from 'react'
-import Title from './Title'
 import { assets, exclusiveOffers } from '../assets/assets'
 
 const ExclusiveOffer = () => {
-  return (
-    <div className='flex flex-col items-center px-6 md:px-16 lg:px-24 xl:px-32 pt-20 pb-30'>
-      <div className='flex flex-col md:flex-row items-center justify-between w-full'>
-        <Title align='left' title='Exclusive Offers' subTitle='Take advantage of our limited-time offers and special packages to enhance your stay and create unforgettable memories.'/>
-        <button className='group flex items-center gap-2 font-medium cursor-pointer max-md:mt-12'>
-            View All Offers
-            <img src={assets.arrowIcon} alt="arrow-icon"
-            className='group-hover:translate-x-1 transition-all' />
-        </button>
-      </div>
-      
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12'>
-        {exclusiveOffers.map((item)=>(
-            <div key={item._id} className='group relative flex flex-col items-start justify-between gap-1 pt-12 md:pt-18 px-4 rounded-xl text-white bg-no-repeat bg-cover bg-center' style={{backgroundImage: `url(${item.image})`}}>
-                <p className='px-3 py-1 absolute top-4 left-4 text-xs bg-white text-gray-800 font-medium rounded-full'>{item.priceOff}% OFF</p>
+    return (
+        <section className='px-6 md:px-16 lg:px-24 py-20 bg-white'>
+            {/* Header */}
+            <div className='flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12'>
                 <div>
-                    <p className='text-2xl font-medium font-playfair'>{item.title}</p>
-                    <p>{item.description}</p>
-                    <p className='text-xs text-white/70 mt-3'>Expires {item.expiryDate}</p>
+                    <p className='text-xs font-semibold uppercase tracking-widest text-[#85A4E1] mb-2'>
+                        ✦ Limited Time
+                    </p>
+                    <h2 className='font-playfair text-3xl md:text-4xl font-bold text-gray-900'>
+                        Exclusive Offers
+                    </h2>
+                    <p className='text-gray-500 mt-2 max-w-md text-sm leading-relaxed'>
+                        Limited-time packages designed to enhance your stay and create unforgettable memories.
+                    </p>
                 </div>
-                <button className='flex items-center gap-2 font-medium cursor-pointer mt-4 mb-5'>
-                    View Offers
-                    <img className='invert group-hover:translate-x-1 transition-all' src={assets.arrowIcon} alt="arrow-icon" />
+                <button className='shrink-0 inline-flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#85A4E1] to-[#6b8fd4] hover:from-[#6b8fd4] hover:to-[#5a7ec3] px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/25 hover:shadow-lg hover:shadow-[#85A4E1]/40 hover:-translate-y-0.5 transition-all duration-200 active:scale-95 cursor-pointer'>
+                    View All Offers
+                    <span className='text-base leading-none'>→</span>
                 </button>
             </div>
-        ))}
-      </div>
-    </div>
-  )
-}
 
-export default ExclusiveOffer
+            {/* Cards */}
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                {exclusiveOffers.map((item) => (
+                    <div key={item._id}
+                        className='group relative rounded-2xl overflow-hidden h-72 cursor-pointer'
+                        style={{ backgroundImage: `url(${item.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+
+                        {/* Gradient overlay */}
+                        <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 transition-all duration-300' />
+
+                        {/* Discount badge */}
+                        <div className='absolute top-4 left-4 bg-[#85A4E1] text-white text-xs font-bold px-3 py-1 rounded-full'>
+                            {item.priceOff}% OFF
+                        </div>
+
+                        {/* Content */}
+                        <div className='absolute bottom-0 left-0 right-0 p-5 text-white'>
+                            <p className='text-xl font-playfair font-semibold leading-tight'>{item.title}</p>
+                            <p className='text-sm text-white/75 mt-1'>{item.description}</p>
+                            <div className='flex items-center justify-between mt-4'>
+                                <p className='text-xs text-white/50'>Expires {item.expiryDate}</p>
+                                <button className='flex items-center gap-1.5 text-xs font-bold bg-white text-gray-900 hover:bg-[#85A4E1] hover:text-white px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all duration-200 active:scale-95'>
+                                    View Offer
+                                    <img className='h-2.5 group-hover:translate-x-0.5 transition-transform' src={assets.arrowIcon} alt="" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
+};
+
+export default ExclusiveOffer;

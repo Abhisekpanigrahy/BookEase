@@ -215,3 +215,21 @@ export const stripePayment = async (req, res) => {
         res.json({success: false, message: "Payment Failed"})
     }
 }
+
+// API to delete a booking — DELETE /api/bookings/:id
+// Only the hotel owner can delete a booking from the dashboard
+export const deleteBooking = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const hotel = await Hotel.findOne({ owner: req.auth.userId });
+        if (!hotel) return res.json({ success: false, message: "No Hotel found" });
+
+        const booking = await Booking.findOne({ _id: id, hotel: hotel._id });
+        if (!booking) return res.json({ success: false, message: "Booking not found or not yours" });
+
+        await Booking.findByIdAndDelete(id);
+        res.json({ success: true, message: "Booking deleted successfully" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
