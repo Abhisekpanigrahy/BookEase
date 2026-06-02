@@ -26,6 +26,7 @@ export const AppProvider = ({ children }) => {
     const [showHotelReg,  setShowHotelReg]  = useState(false);
     const [searchedCities, setSearchedCities] = useState([]);
     const [rooms,         setRooms]         = useState([]);
+    const [isRoomsLoaded, setIsRoomsLoaded] = useState(false);
 
     // ─── Rooms: serve from sessionStorage cache immediately, revalidate silently ───
     const fetchRooms = () => dedupe('rooms', async () => {
@@ -33,6 +34,7 @@ export const AppProvider = ({ children }) => {
             const cached = sessionStorage.getItem('be_rooms');
             if (cached) {
                 setRooms(JSON.parse(cached));          // instant render from cache
+                setIsRoomsLoaded(true);
             }
             // always revalidate in background (stale-while-revalidate)
             const { data } = await axios.get('/api/rooms');
@@ -41,6 +43,9 @@ export const AppProvider = ({ children }) => {
                 sessionStorage.setItem('be_rooms', JSON.stringify(data.rooms));
             }
         } catch (_) { /* silent — rooms cached, no toast needed */ }
+        finally {
+            setIsRoomsLoaded(true);
+        }
     });
 
     // ─── User profile: get token and user data in parallel ───────────────────────
@@ -87,6 +92,7 @@ export const AppProvider = ({ children }) => {
         getToken,
         isOwner,  setIsOwner,
         isRoleLoaded,
+        isRoomsLoaded,
         showHotelReg, setShowHotelReg,
         searchedCities, setSearchedCities,
         rooms,    setRooms,

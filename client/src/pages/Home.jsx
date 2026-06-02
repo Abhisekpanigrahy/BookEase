@@ -35,13 +35,17 @@ const FeaturedSkeleton = () => (
 );
 
 const Home = () => {
-    const { rooms } = useAppContext();
+    const { rooms, isRoomsLoaded } = useAppContext();
 
     return (
         <>
             <Hero />
             <RecommendedHotels />
-            {rooms.length > 0 ? <FeaturedDestination /> : <FeaturedSkeleton />}
+            {!isRoomsLoaded ? (
+                <FeaturedSkeleton />
+            ) : rooms.length > 0 ? (
+                <FeaturedDestination />
+            ) : null}
             <ExclusiveOffer />
             <Testimonial />
             <NewsLetter />

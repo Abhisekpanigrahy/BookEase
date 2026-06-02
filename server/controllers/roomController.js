@@ -16,6 +16,7 @@ export const createRoom = async (req, res) => {
         const images = await Promise.all(uploadImages)
         await Room.create({
             hotel: hotel._id,
+            owner: req.auth.userId,
             roomType,
             pricePerNight: +pricePerNight,
             amenities: JSON.parse(amenities),
@@ -43,8 +44,7 @@ export const getRooms = async (req, res) => {
 // API to get all rooms for a specific hotel owner
 export const getOwnerRooms = async (req, res) => {
     try {
-        const hotelData = await Hotel.findOne({owner: req.auth.userId})
-        const rooms = await Room.find({hotel: hotelData._id.toString()}).populate("hotel");
+        const rooms = await Room.find({owner: req.auth.userId}).populate("hotel");
         res.json({success: true, rooms});
     } catch (error) {
         res.json({success: false, message: error.message});
@@ -68,11 +68,8 @@ export const toggleRoomAvailabililty = async (req, res) => {
 export const deleteRoom = async (req, res) => {
     try {
         const { id } = req.params;
-        // Verify ownership
-        const hotel = await Hotel.findOne({ owner: req.auth.userId });
-        if (!hotel) return res.json({ success: false, message: "No Hotel found" });
 
-        const room = await Room.findOne({ _id: id, hotel: hotel._id });
+        const room = await Room.findOne({ _id: id, owner: req.auth.userId });
         if (!room) return res.json({ success: false, message: "Room not found or not yours" });
 
         // Delete all bookings for this room first
@@ -91,11 +88,7 @@ export const updateRoom = async (req, res) => {
         const { id } = req.params;
         const { roomType, pricePerNight, amenities } = req.body;
 
-        // Verify ownership
-        const hotel = await Hotel.findOne({ owner: req.auth.userId });
-        if (!hotel) return res.json({ success: false, message: "No Hotel found" });
-
-        const room = await Room.findOne({ _id: id, hotel: hotel._id });
+        const room = await Room.findOne({ _id: id, owner: req.auth.userId });
         if (!room) return res.json({ success: false, message: "Room not found or not yours" });
 
         if (roomType)      room.roomType = roomType;

@@ -113,7 +113,7 @@ const RoomCard = ({ room, navigate, currency }) => (
 // ── Main Page ─────────────────────────────────────────────────────────────────
 const AllRooms = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const { rooms, navigate, currency } = useAppContext();
+    const { rooms, isRoomsLoaded, navigate, currency } = useAppContext();
 
     const [openFilters,    setOpenFilters]    = useState(false);
     const [selectedFilters, setSelectedFilters] = useState({ roomType: [], priceRange: [] });
@@ -299,23 +299,31 @@ const AllRooms = () => {
 
                     {/* Room list */}
                     <div className='flex flex-col gap-5'>
-                        {rooms.length === 0
+                        {!isRoomsLoaded
                             ? Array.from({ length: 4 }).map((_, i) => <RoomListSkeleton key={i} />)
-                            : filteredRooms.length === 0
+                            : rooms.length === 0
                                 ? (
                                     <div className='bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-24 px-6 text-center'>
-                                        <div className='text-5xl mb-4'>🔍</div>
-                                        <p className='text-lg font-bold text-gray-800'>No rooms match your filters</p>
-                                        <p className='text-sm text-gray-500 mt-2 max-w-xs'>Try adjusting your filters or clearing them to see all available rooms.</p>
-                                        <button onClick={clearFilters}
-                                            className='mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md cursor-pointer active:scale-95 transition-all'>
-                                            Clear Filters
-                                        </button>
+                                        <div className='text-6xl mb-6 bg-slate-50 w-24 h-24 flex items-center justify-center rounded-full mx-auto'>🏨</div>
+                                        <p className='text-2xl font-bold text-gray-900'>No hotels available yet</p>
+                                        <p className='text-sm text-gray-500 mt-2 max-w-xs mx-auto'>We're currently expanding our listings. Please check back soon for new amazing places to stay!</p>
                                     </div>
                                 )
-                                : filteredRooms.map(room => (
-                                    <RoomCard key={room._id} room={room} navigate={navigate} currency={currency} />
-                                ))
+                                : filteredRooms.length === 0
+                                    ? (
+                                        <div className='bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-24 px-6 text-center'>
+                                            <div className='text-5xl mb-4'>🔍</div>
+                                            <p className='text-lg font-bold text-gray-800'>No rooms match your filters</p>
+                                            <p className='text-sm text-gray-500 mt-2 max-w-xs'>Try adjusting your filters or clearing them to see all available rooms.</p>
+                                            <button onClick={clearFilters}
+                                                className='mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md cursor-pointer active:scale-95 transition-all'>
+                                                Clear Filters
+                                            </button>
+                                        </div>
+                                    )
+                                    : filteredRooms.map(room => (
+                                        <RoomCard key={room._id} room={room} navigate={navigate} currency={currency} />
+                                    ))
                         }
                     </div>
                 </AnimateIn>
