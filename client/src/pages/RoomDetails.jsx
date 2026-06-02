@@ -99,7 +99,13 @@ const RoomDetails = () => {
                     <div className='flex flex-col w-full md:w-auto'>
                         <label htmlFor="checkInDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-In</label>
                         <div className="relative">
-                            <input onChange={e => setCheckInDate(e.target.value)} min={new Date().toISOString().split('T')[0]} type="date" id='checkInDate'
+                            <input 
+                                onFocus={(e) => (e.target.type = "date")}
+                                onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
+                                onChange={e => setCheckInDate(e.target.value)} 
+                                min={new Date().toISOString().split('T')[0]} 
+                                type="text" 
+                                id='checkInDate'
                                 placeholder="dd-mm-yyyy"
                                 className='w-full border border-gray-200 rounded-xl px-3 py-2.5 pl-10 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' required />
                             <img src={assets.calenderIcon} alt="" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-50 pointer-events-none" />
@@ -109,7 +115,14 @@ const RoomDetails = () => {
                     <div className='flex flex-col w-full md:w-auto'>
                         <label htmlFor="checkOutDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-Out</label>
                         <div className="relative">
-                            <input onChange={e => setCheckOutDate(e.target.value)} min={checkInDate} disabled={!checkInDate} type="date" id='checkOutDate'
+                            <input 
+                                onFocus={(e) => (e.target.type = "date")}
+                                onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
+                                onChange={e => setCheckOutDate(e.target.value)} 
+                                min={checkInDate || new Date().toISOString().split('T')[0]} 
+                                disabled={!checkInDate} 
+                                type="text" 
+                                id='checkOutDate'
                                 placeholder="dd-mm-yyyy"
                                 className='w-full border border-gray-200 rounded-xl px-3 py-2.5 pl-10 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all disabled:opacity-50 cursor-pointer min-h-[46px]' required />
                             <img src={assets.calenderIcon} alt="" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-50 pointer-events-none" />

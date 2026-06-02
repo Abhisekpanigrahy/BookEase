@@ -72,7 +72,12 @@ const Hero = () => {
                             <label className='text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1'>
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check In
                             </label>
-                            <input type="date" value={checkIn} onChange={e => setCheckIn(e.target.value)}
+                            <input 
+                                onFocus={(e) => (e.target.type = "date")}
+                                onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
+                                type="text" 
+                                value={checkIn} 
+                                onChange={e => setCheckIn(e.target.value)}
                                 placeholder="dd-mm-yyyy"
                                 className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' />
                         </div>
@@ -81,7 +86,12 @@ const Hero = () => {
                             <label className='text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1'>
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check Out
                             </label>
-                            <input type="date" value={checkOut} onChange={e => setCheckOut(e.target.value)}
+                            <input 
+                                onFocus={(e) => (e.target.type = "date")}
+                                onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
+                                type="text" 
+                                value={checkOut} 
+                                onChange={e => setCheckOut(e.target.value)}
                                 placeholder="dd-mm-yyyy"
                                 className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' />
                         </div>

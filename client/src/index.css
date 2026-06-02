@@ -17,24 +17,20 @@
 
 /* Fix for date inputs on mobile */
 input[type="date"] {
-  display: flex;
-  align-items: center;
-  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 46px;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
   cursor: pointer;
-  opacity: 0.6;
-}
-
-/* Ensure the date text is visible on mobile */
-input[type="date"]:before {
-  content: attr(placeholder);
-  width: 100%;
-}
-
-input[type="date"]:focus:before,
-input[type="date"]:not([value=""]):before {
-  content: "";
-  display: none;
 }
