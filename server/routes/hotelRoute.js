@@ -1,10 +1,12 @@
 import express from "express";
 import { protect } from "../middleware/authMiddleware.js";
-import { registerHotel } from "../controllers/hotelController.js";
+import { getHotelData, registerHotel, updateHotelData } from "../controllers/hotelController.js";
 
 const hotelRouter = express.Router();
 
-// Endpoint
-hotelRouter.post('/', protect, registerHotel);
+// Endpoints
+hotelRouter.post('/',        protect, registerHotel);
+hotelRouter.get('/get-data', protect, getHotelData);
+hotelRouter.put('/update',   protect, updateHotelData);
 
 export default hotelRouter;

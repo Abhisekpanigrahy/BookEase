@@ -6,6 +6,32 @@ import StarRating from '../components/StarRating';
 import { useAppContext } from '../context/AppContext';
 import toast from 'react-hot-toast';
 
+// ── Review Item Component ─────────────────────────────────────────────────────
+const ReviewItem = ({ review }) => (
+    <div className='py-6 border-b border-gray-100 last:border-0'>
+        <div className='flex items-center gap-3 mb-3'>
+            <img src={review.user.image} alt={review.user.username} className='w-10 h-10 rounded-full object-cover ring-2 ring-gray-50' />
+            <div>
+                <p className='text-sm font-bold text-gray-900'>{review.user.username}</p>
+                <div className='flex items-center gap-2'>
+                    <div className='flex gap-0.5'>
+                        {[...Array(5)].map((_, i) => (
+                            <img 
+                                key={i} 
+                                src={i < review.rating ? assets.starIconFilled : assets.starIconOutlined} 
+                                alt="star" 
+                                className='h-2.5 w-2.5' 
+                            />
+                        ))}
+                    </div>
+                    <span className='text-[10px] text-gray-400 font-medium'>{new Date(review.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                </div>
+            </div>
+        </div>
+        <p className='text-sm text-gray-600 leading-relaxed pl-13'>{review.comment}</p>
+    </div>
+);
+
 const RoomDetails = () => {
     const { id } = useParams();
     const { rooms, getToken, axios, navigate } = useAppContext();
@@ -16,6 +42,16 @@ const RoomDetails = () => {
     const [guests, setGuests]         = useState(1);
     const [isAvailable, setIsAvailable]   = useState(false);
     const [loading, setLoading]       = useState(false);
+    const [reviews, setReviews]       = useState([]);
+    const [reviewsLoading, setReviewsLoading] = useState(true);
+
+    const fetchReviews = async (hotelId) => {
+        try {
+            const { data } = await axios.get(`/api/reviews/hotel/${hotelId}`);
+            if (data.success) setReviews(data.reviews);
+        } catch (_) { }
+        finally { setReviewsLoading(false); }
+    };
 
     const checkAvailability = async () => {
         try {
@@ -45,8 +81,16 @@ const RoomDetails = () => {
 
     useEffect(() => {
         const r = rooms.find(r => r._id === id);
-        if (r) { setRoom(r); setMainImage(r.images[0]); }
-    }, [rooms]);
+        if (r) { 
+            setRoom(r); 
+            setMainImage(r.images[0]); 
+            fetchReviews(r.hotel._id);
+        }
+    }, [rooms, id]);
+
+    const averageRating = reviews.length > 0 
+        ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+        : "0.0";
 
     return room && (
         <AnimateIn as='div' variant='fadeUpSoft' className='py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32'>
@@ -57,7 +101,13 @@ const RoomDetails = () => {
             </div>
 
             <div className='flex items-center gap-1 mt-2'>
-                <StarRating /><p className='ml-2 text-sm text-gray-500'>200+ reviews</p>
+                <div className='flex gap-0.5 mr-1'>
+                    {[...Array(5)].map((_, i) => (
+                        <img key={i} src={i < Math.round(averageRating) ? assets.starIconFilled : assets.starIconOutlined} alt="star" className='h-3.5 w-3.5' />
+                    ))}
+                </div>
+                <p className='text-sm font-bold text-gray-700'>{averageRating}</p>
+                <p className='ml-2 text-sm text-gray-500'>{reviews.length} review{reviews.length !== 1 ? 's' : ''}</p>
             </div>
             <div className='flex items-center gap-1 text-gray-500 mt-2'>
                 <img src={assets.locationIcon} alt="" /><span>{room.hotel.address}</span>
@@ -66,12 +116,12 @@ const RoomDetails = () => {
             {/* Images */}
             <div className='flex flex-col lg:flex-row mt-6 gap-6'>
                 <div className='lg:w-1/2'>
-                    <img src={mainImage} alt="Room" className='w-full rounded-2xl shadow-lg object-cover' />
+                    <img src={mainImage} alt="Room" className='w-full rounded-2xl shadow-lg object-cover aspect-[4/3]' />
                 </div>
                 <div className='grid grid-cols-2 gap-4 lg:w-1/2'>
                     {room.images.length > 1 && room.images.map((img, i) => (
                         <img key={i} src={img} alt="Room" onClick={() => setMainImage(img)}
-                            className={`w-full rounded-xl shadow-md object-cover cursor-pointer transition-all duration-200 hover:opacity-90 ${mainImage === img ? 'ring-2 ring-[#85A4E1] ring-offset-2' : ''}`} />
+                            className={`w-full rounded-xl shadow-md object-cover aspect-[4/3] cursor-pointer transition-all duration-200 hover:opacity-90 ${mainImage === img ? 'ring-2 ring-[#85A4E1] ring-offset-2' : ''}`} />
                     ))}
                 </div>
             </div>
@@ -148,17 +198,56 @@ const RoomDetails = () => {
                 </button>
             </form>
 
-            {/* Common specs */}
-            <div className='mt-20 space-y-5'>
-                {roomCommonData.map((spec, i) => (
-                    <div key={i} className='flex items-start gap-3'>
-                        <img src={spec.icon} alt={spec.title} className='w-6 mt-0.5' />
-                        <div>
-                            <p className='font-semibold text-gray-800'>{spec.title}</p>
-                            <p className='text-sm text-gray-500 mt-0.5'>{spec.description}</p>
+            <div className='grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12 mt-20'>
+                {/* Reviews Section */}
+                <div className='bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8'>
+                    <div className='flex items-center justify-between mb-8 pb-4 border-b border-gray-50'>
+                        <h3 className='text-2xl font-bold text-gray-900'>Guest Reviews</h3>
+                        <div className='flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl'>
+                            <span className='text-lg font-bold text-[#5b7fe8]'>{averageRating}</span>
+                            <div className='flex gap-0.5'>
+                                {[...Array(5)].map((_, i) => (
+                                    <img key={i} src={i < Math.round(averageRating) ? assets.starIconFilled : assets.starIconOutlined} alt="star" className='h-3 w-3' />
+                                ))}
+                            </div>
                         </div>
                     </div>
-                ))}
+
+                    {reviewsLoading ? (
+                        <div className='space-y-6 animate-pulse'>
+                            {[...Array(2)].map((_, i) => (
+                                <div key={i} className='h-32 bg-gray-50 rounded-2xl w-full' />
+                            ))}
+                        </div>
+                    ) : reviews.length === 0 ? (
+                        <div className='py-12 text-center'>
+                            <div className='text-4xl mb-4 opacity-30'>💬</div>
+                            <p className='text-gray-500 text-sm'>No reviews yet. Be the first to share your experience!</p>
+                        </div>
+                    ) : (
+                        <div className='divide-y divide-gray-50'>
+                            {reviews.map(review => (
+                                <ReviewItem key={review._id} review={review} />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Common specs */}
+                <div className='space-y-6'>
+                    <h3 className='text-xl font-bold text-gray-900 mb-2'>Property Policies</h3>
+                    {roomCommonData.map((spec, i) => (
+                        <div key={i} className='flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors'>
+                            <div className='bg-[#85A4E1]/10 p-2.5 rounded-lg shrink-0'>
+                                <img src={spec.icon} alt={spec.title} className='w-5 h-5' />
+                            </div>
+                            <div>
+                                <p className='font-bold text-gray-800 text-sm'>{spec.title}</p>
+                                <p className='text-xs text-gray-500 mt-1 leading-relaxed'>{spec.description}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             <div className='max-w-3xl border-y border-gray-200 my-12 py-10 text-gray-500 text-sm leading-relaxed'>
@@ -173,7 +262,14 @@ const RoomDetails = () => {
                     )}
                     <div>
                         <p className='text-lg md:text-xl font-semibold text-gray-800'>Hosted by {room.hotel.name}</p>
-                        <div className='flex items-center mt-1'><StarRating /><p className='ml-2 text-sm text-gray-500'>200+ reviews</p></div>
+                        <div className='flex items-center mt-1'>
+                            <div className='flex gap-0.5 mr-2'>
+                                {[...Array(5)].map((_, i) => (
+                                    <img key={i} src={i < Math.round(averageRating) ? assets.starIconFilled : assets.starIconOutlined} alt="star" className='h-3 w-3' />
+                                ))}
+                            </div>
+                            <p className='text-sm text-gray-500'>{reviews.length} reviews</p>
+                        </div>
                     </div>
                 </div>
                 <button className='mt-2 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer'>

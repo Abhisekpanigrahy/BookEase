@@ -24,3 +24,39 @@ export const registerHotel = async (req, res) => {
         res.json({success: false, message: error.message})
     }
 }
+
+// API to get hotel data for a specific owner
+export const getHotelData = async (req, res) => {
+    try {
+        const owner = req.auth.userId;
+        const hotel = await Hotel.findOne({ owner });
+        if (!hotel) {
+            return res.json({ success: false, message: "No Hotel found" });
+        }
+        res.json({ success: true, hotel });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
+
+// API to update hotel data
+export const updateHotelData = async (req, res) => {
+    try {
+        const { name, address, contact, city } = req.body;
+        const owner = req.auth.userId;
+
+        const hotel = await Hotel.findOneAndUpdate(
+            { owner },
+            { name, address, contact, city },
+            { new: true }
+        );
+
+        if (!hotel) {
+            return res.json({ success: false, message: "No Hotel found" });
+        }
+
+        res.json({ success: true, message: "Hotel information updated successfully", hotel });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};

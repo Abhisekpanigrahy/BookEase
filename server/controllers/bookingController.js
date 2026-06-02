@@ -51,6 +51,7 @@ export const createBooking = async (req, res) => {
         // if room is avialable
         // Get totalPrice from Room
         const roomData = await Room.findById(room).populate("hotel");
+
         let totalPrice = roomData.pricePerNight;
 
         // Calculate totalPrice based on night
@@ -229,6 +230,41 @@ export const deleteBooking = async (req, res) => {
 
         await Booking.findByIdAndDelete(id);
         res.json({ success: true, message: "Booking deleted successfully" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
+
+// API to cancel a booking — POST /api/bookings/cancel
+// Users can cancel their own bookings
+export const cancelBooking = async (req, res) => {
+    try {
+        const { bookingId } = req.body;
+        const user = req.user._id;
+
+        const booking = await Booking.findOne({ _id: bookingId, user });
+        if (!booking) {
+            return res.json({ success: false, message: "Booking not found" });
+        }
+
+        // Cancellation Policy: Can cancel if not already cancelled and check-in is in the future
+        if (booking.status === "cancelled") {
+            return res.json({ success: false, message: "Booking is already cancelled" });
+        }
+
+        const checkIn = new Date(booking.checkInDate);
+        const now = new Date();
+        
+        // Example policy: Must cancel at least 24 hours before check-in
+        const hoursUntilCheckIn = (checkIn - now) / (1000 * 60 * 60);
+        if (hoursUntilCheckIn < 24) {
+            return res.json({ success: false, message: "Cancellations must be made at least 24 hours before check-in" });
+        }
+
+        booking.status = "cancelled";
+        await booking.save();
+
+        res.json({ success: true, message: "Booking cancelled successfully" });
     } catch (error) {
         res.json({ success: false, message: error.message });
     }

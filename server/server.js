@@ -12,6 +12,7 @@ import roomRouter from "./routes/roomRoute.js";
 import bookingRouter from "./routes/bookingRoutes.js";
 import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
 import newsletterRouter from "./routes/newsletterRoute.js";
+import reviewRouter from "./routes/reviewRoute.js";
 
 dotenv.config();
 
@@ -45,6 +46,8 @@ app.use('/api/rooms', roomRouter)
 app.use('/api/bookings', bookingRouter)
 // 6th Route ( Newsletter Route )
 app.use('/api/newsletter', newsletterRouter)
+// 7th Route ( Review Route )
+app.use('/api/reviews', reviewRouter)
 
 // Port for running
 const PORT = process.env.PORT || 3000;
