@@ -100,7 +100,8 @@ const RoomDetails = () => {
                         <label htmlFor="checkInDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-In</label>
                         <div className="relative">
                             <input 
-                                onFocus={(e) => (e.target.type = "date")}
+                                onFocus={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
+                                onClick={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
                                 onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                                 onChange={e => setCheckInDate(e.target.value)} 
                                 min={new Date().toISOString().split('T')[0]} 
@@ -116,7 +117,8 @@ const RoomDetails = () => {
                         <label htmlFor="checkOutDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-Out</label>
                         <div className="relative">
                             <input 
-                                onFocus={(e) => (e.target.type = "date")}
+                                onFocus={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
+                                onClick={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
                                 onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                                 onChange={e => setCheckOutDate(e.target.value)} 
                                 min={checkInDate || new Date().toISOString().split('T')[0]} 

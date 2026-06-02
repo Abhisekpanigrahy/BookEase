@@ -73,7 +73,8 @@ const Hero = () => {
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check In
                             </label>
                             <input 
-                                onFocus={(e) => (e.target.type = "date")}
+                                onFocus={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
+                                onClick={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
                                 onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                                 type="text" 
                                 value={checkIn} 
@@ -87,7 +88,8 @@ const Hero = () => {
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check Out
                             </label>
                             <input 
-                                onFocus={(e) => (e.target.type = "date")}
+                                onFocus={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
+                                onClick={(e) => { e.target.type = "date"; e.target.showPicker?.(); }}
                                 onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
                                 type="text" 
                                 value={checkOut} 
