@@ -35,7 +35,7 @@ export const getRooms = async (req, res) => {
         // Fetch all available rooms
         const rooms = await Room.find({isAvailable: true}).populate({
             path: 'hotel',
-            populate: { path: 'owner', select: 'image' }
+            populate: { path: 'owner', select: 'image email' }
         }).sort({createdAt: -1});
 
         // For each room, fetch reviews to calculate avg rating

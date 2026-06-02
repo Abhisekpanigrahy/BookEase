@@ -72,7 +72,7 @@ const ReviewModal = ({ booking, onClose, onSubmit }) => {
 };
 
 const MyBookings = () => {
-    const { axios, getToken, user } = useAppContext();
+    const { axios, getToken, user, navigate } = useAppContext();
     const [bookings, setBookings] = useState(() => {
         try {
             const raw = sessionStorage.getItem(CACHE_KEY);

@@ -272,7 +272,9 @@ const RoomDetails = () => {
                         </div>
                     </div>
                 </div>
-                <button className='mt-2 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer'>
+                <button 
+                    onClick={() => { if (room.hotel.owner?.email) window.location.href = `mailto:${room.hotel.owner.email}?subject=Inquiry regarding ${room.hotel.name}`; }}
+                    className='mt-2 inline-flex items-center gap-2 bg-gradient-to-r from-[#5b7fe8] to-[#85A4E1] hover:from-[#4a6edb] hover:to-[#6b8fd4] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md shadow-[#85A4E1]/30 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200 cursor-pointer'>
                     Contact Now
                 </button>
             </div>
