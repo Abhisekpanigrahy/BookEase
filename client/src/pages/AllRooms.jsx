@@ -67,8 +67,8 @@ const RoomCard = ({ room, navigate, currency }) => (
                     </h3>
                     <div className='flex items-center gap-1 shrink-0 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-xl'>
                         <img src={assets.starIconFilled} alt='star' className='h-3.5 w-3.5' />
-                        <span className='text-xs font-bold text-amber-600'>4.5</span>
-                        <span className='text-xs text-amber-400'>· 200+</span>
+                        <span className='text-xs font-bold text-amber-600'>{room.avgRating}</span>
+                        <span className='text-xs text-amber-400'>· {room.totalReviews}</span>
                     </div>
                 </div>
 

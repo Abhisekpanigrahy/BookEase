@@ -184,11 +184,12 @@ const MyBookings = () => {
                                 <AnimateIn key={booking._id} as='div' variant='fadeUpSoft' once={false} className='grid grid-cols-1 md:grid-cols-[3fr_2fr_1fr] w-full border-b border-gray-100 py-6 first:border-t hover:bg-gray-50/60 transition-colors rounded-xl px-2'>
 
                                     {/* Hotel info */}
-                                    <div className='flex flex-col md:flex-row gap-4'>
+                                    <div className='flex flex-col md:flex-row gap-4 cursor-pointer'
+                                        onClick={() => { navigate(`/rooms/${booking.room._id}`); scrollTo(0, 0); }}>
                                         <img src={booking.room.images[0]} alt="hotel"
                                             className='md:w-40 h-28 md:h-28 rounded-xl object-cover shadow-sm' />
                                         <div className='flex flex-col gap-1.5'>
-                                            <p className='font-playfair text-xl font-semibold'>{booking.hotel.name}
+                                            <p className='font-playfair text-xl font-semibold hover:text-[#5b7fe8] transition-colors'>{booking.hotel.name}
                                                 <span className='font-inter text-xs font-normal text-gray-400 ml-1.5'>({booking.room.roomType})</span>
                                             </p>
                                             <div className='flex items-center gap-1 text-xs text-gray-500'>

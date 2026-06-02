@@ -2,6 +2,7 @@ import Hotel from "../models/Hotel.js"
 import { v2 as cloudinary } from "cloudinary";
 import Room from "../models/Room.js";
 import Booking from "../models/Booking.js";
+import Review from "../models/Review.js";
 
 // API to create a new room for a hotel
 export const createRoom = async (req, res) => {
@@ -31,11 +32,27 @@ export const createRoom = async (req, res) => {
 // API to get all rooms
 export const getRooms = async (req, res) => {
     try {
+        // Fetch all available rooms
         const rooms = await Room.find({isAvailable: true}).populate({
             path: 'hotel',
             populate: { path: 'owner', select: 'image' }
-        }).sort({createdAt: -1})
-        res.json({success: true, rooms});
+        }).sort({createdAt: -1});
+
+        // For each room, fetch reviews to calculate avg rating
+        const roomsWithReviews = await Promise.all(rooms.map(async (room) => {
+            const reviews = await Review.find({ hotel: room.hotel._id });
+            const avgRating = reviews.length > 0 
+                ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+                : "0.0";
+            
+            // Convert to plain object to add property
+            const roomObj = room.toObject();
+            roomObj.avgRating = avgRating;
+            roomObj.totalReviews = reviews.length;
+            return roomObj;
+        }));
+
+        res.json({success: true, rooms: roomsWithReviews});
     } catch (error) {
         res.json({success: false, message: error.message})
     }

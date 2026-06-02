@@ -28,7 +28,7 @@ const HotelCard = ({ room, index }) => {
                     <p className='font-playfair text-lg font-semibold text-gray-800 leading-tight line-clamp-1'>{room.hotel.name}</p>
                     <div className='flex items-center gap-0.5 shrink-0 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-lg'>
                         <img src={assets.starIconFilled} alt="star" className='h-3.5 w-3.5' />
-                        <span className='text-xs font-bold text-amber-600'>4.5</span>
+                        <span className='text-xs font-bold text-amber-600'>{room.avgRating}</span>
                     </div>
                 </div>
 
