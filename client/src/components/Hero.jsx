@@ -68,28 +68,44 @@ const Hero = () => {
                             <datalist id='destinations'>{cities.map((city, i) => <option value={city} key={i} />)}</datalist>
                         </div>
 
+                        {/* Check In */}
                         <div className='flex flex-col gap-1'>
                             <label className='text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1'>
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check In
                             </label>
-                            <input 
-                                type="date"
-                                value={checkIn} 
-                                onChange={e => setCheckIn(e.target.value)}
-                                min={new Date().toISOString().split('T')[0]}
-                                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' />
+                            <div className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 cursor-pointer focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white'>
+                                <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
+                                <span className={`text-sm flex-1 ${checkIn ? 'text-gray-800' : 'text-gray-400'}`}>
+                                    {checkIn ? new Date(checkIn + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                                </span>
+                                <input
+                                    type="date"
+                                    value={checkIn}
+                                    onChange={e => setCheckIn(e.target.value)}
+                                    min={new Date().toISOString().split('T')[0]}
+                                    className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                                />
+                            </div>
                         </div>
 
+                        {/* Check Out */}
                         <div className='flex flex-col gap-1'>
                             <label className='text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1'>
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check Out
                             </label>
-                            <input 
-                                type="date"
-                                value={checkOut} 
-                                onChange={e => setCheckOut(e.target.value)}
-                                min={checkIn || new Date().toISOString().split('T')[0]}
-                                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' />
+                            <div className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 cursor-pointer focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white'>
+                                <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
+                                <span className={`text-sm flex-1 ${checkOut ? 'text-gray-800' : 'text-gray-400'}`}>
+                                    {checkOut ? new Date(checkOut + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                                </span>
+                                <input
+                                    type="date"
+                                    value={checkOut}
+                                    onChange={e => setCheckOut(e.target.value)}
+                                    min={checkIn || new Date().toISOString().split('T')[0]}
+                                    className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                                />
+                            </div>
                         </div>
 
                         <div className='flex flex-col gap-1'>

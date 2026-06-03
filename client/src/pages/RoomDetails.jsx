@@ -148,28 +148,38 @@ const RoomDetails = () => {
                 <div className='flex flex-col flex-wrap md:flex-row items-start md:items-center gap-4 md:gap-8 text-gray-600'>
                     <div className='flex flex-col w-full md:w-auto'>
                         <label htmlFor="checkInDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-In</label>
-                        <div className="relative">
-                            <input 
+                        <div className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 cursor-pointer focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white'>
+                            <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
+                            <span className={`text-sm flex-1 ${checkInDate ? 'text-gray-800' : 'text-gray-400'}`}>
+                                {checkInDate ? new Date(checkInDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                            </span>
+                            <input
                                 type="date"
-                                onChange={e => setCheckInDate(e.target.value)} 
-                                min={new Date().toISOString().split('T')[0]} 
                                 id='checkInDate'
-                                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 pl-10 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all cursor-pointer min-h-[46px]' required />
-                            <img src={assets.calenderIcon} alt="" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-50 pointer-events-none" />
+                                onChange={e => setCheckInDate(e.target.value)}
+                                min={new Date().toISOString().split('T')[0]}
+                                required
+                                className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                            />
                         </div>
                     </div>
                     <div className='w-px h-12 bg-gray-200 max-md:hidden' />
                     <div className='flex flex-col w-full md:w-auto'>
                         <label htmlFor="checkOutDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-Out</label>
-                        <div className="relative">
-                            <input 
+                        <div className={`relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white ${!checkInDate ? 'opacity-50' : 'cursor-pointer'}`}>
+                            <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
+                            <span className={`text-sm flex-1 ${checkOutDate ? 'text-gray-800' : 'text-gray-400'}`}>
+                                {checkOutDate ? new Date(checkOutDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                            </span>
+                            <input
                                 type="date"
-                                onChange={e => setCheckOutDate(e.target.value)} 
-                                min={checkInDate || new Date().toISOString().split('T')[0]} 
-                                disabled={!checkInDate} 
                                 id='checkOutDate'
-                                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 pl-10 text-sm outline-none focus:border-[#85A4E1] focus:ring-2 focus:ring-[#85A4E1]/20 transition-all disabled:opacity-50 cursor-pointer min-h-[46px]' required />
-                            <img src={assets.calenderIcon} alt="" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-50 pointer-events-none" />
+                                onChange={e => setCheckOutDate(e.target.value)}
+                                min={checkInDate || new Date().toISOString().split('T')[0]}
+                                disabled={!checkInDate}
+                                required
+                                className='absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed'
+                            />
                         </div>
                     </div>
                     <div className='w-px h-12 bg-gray-200 max-md:hidden' />
