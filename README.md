@@ -13,8 +13,8 @@ This project is ideal for:
 
 - Scalable project structure reference
 
-🔗 **Live Demo (Frontend):** https://bookease.vercel.app/  
-🔗 **Backend API (Live):** https://hotel-booking-backend-ashen-eight.vercel.app/
+🔗 **Live Demo (Frontend):** https://book-ease-lime.vercel.app/  
+🔗 **Backend API (Live):** https://book-ease-backend.vercel.app/
 
 ---
 
