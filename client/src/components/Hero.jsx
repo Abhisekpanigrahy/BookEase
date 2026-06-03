@@ -1,7 +1,17 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import AnimateIn from './AnimateIn'
 import { assets, cities } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
+
+// Calendar SVG icon (black)
+const CalendarIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-800 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+)
 
 const Hero = () => {
     const { navigate, getToken, axios, setSearchedCities } = useAppContext();
@@ -9,6 +19,16 @@ const Hero = () => {
     const [checkIn,     setCheckIn]     = useState("");
     const [checkOut,    setCheckOut]    = useState("");
     const [guests,      setGuests]      = useState(1);
+    const checkInRef  = useRef(null);
+    const checkOutRef = useRef(null);
+
+    const today = new Date().toISOString().split('T')[0];
+
+    const formatDisplay = (val) => {
+        if (!val) return 'dd-mm-yyyy';
+        const [y, m, d] = val.split('-');
+        return `${d}-${m}-${y}`;
+    };
 
     const onSearch = async (e) => {
         e.preventDefault();
@@ -73,17 +93,22 @@ const Hero = () => {
                             <label className='text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1'>
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check In
                             </label>
-                            <div className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 cursor-pointer focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white'>
-                                <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
-                                <span className={`text-sm flex-1 ${checkIn ? 'text-gray-800' : 'text-gray-400'}`}>
-                                    {checkIn ? new Date(checkIn + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                            <div
+                                onClick={() => { checkInRef.current?.showPicker?.(); checkInRef.current?.focus(); }}
+                                className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center justify-between px-3 gap-2 cursor-pointer hover:border-[#85A4E1] transition-all bg-white select-none'
+                            >
+                                <span className={`text-sm ${checkIn ? 'text-gray-800' : 'text-gray-400'}`}>
+                                    {formatDisplay(checkIn)}
                                 </span>
+                                <CalendarIcon />
                                 <input
+                                    ref={checkInRef}
                                     type="date"
                                     value={checkIn}
                                     onChange={e => setCheckIn(e.target.value)}
-                                    min={new Date().toISOString().split('T')[0]}
-                                    className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                                    min={today}
+                                    className='absolute inset-0 w-full h-full opacity-0 cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
+                                    tabIndex={-1}
                                 />
                             </div>
                         </div>
@@ -93,17 +118,22 @@ const Hero = () => {
                             <label className='text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1'>
                                 <img src={assets.calenderIcon} alt="" className='h-3.5' />Check Out
                             </label>
-                            <div className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 cursor-pointer focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white'>
-                                <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
-                                <span className={`text-sm flex-1 ${checkOut ? 'text-gray-800' : 'text-gray-400'}`}>
-                                    {checkOut ? new Date(checkOut + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                            <div
+                                onClick={() => { checkOutRef.current?.showPicker?.(); checkOutRef.current?.focus(); }}
+                                className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center justify-between px-3 gap-2 cursor-pointer hover:border-[#85A4E1] transition-all bg-white select-none'
+                            >
+                                <span className={`text-sm ${checkOut ? 'text-gray-800' : 'text-gray-400'}`}>
+                                    {formatDisplay(checkOut)}
                                 </span>
+                                <CalendarIcon />
                                 <input
+                                    ref={checkOutRef}
                                     type="date"
                                     value={checkOut}
                                     onChange={e => setCheckOut(e.target.value)}
-                                    min={checkIn || new Date().toISOString().split('T')[0]}
-                                    className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                                    min={checkIn || today}
+                                    className='absolute inset-0 w-full h-full opacity-0 cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
+                                    tabIndex={-1}
                                 />
                             </div>
                         </div>

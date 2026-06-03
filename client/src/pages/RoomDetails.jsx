@@ -1,10 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { assets, facilityIcons, roomCommonData } from '../assets/assets';
 import AnimateIn from '../components/AnimateIn';
 import StarRating from '../components/StarRating';
 import { useAppContext } from '../context/AppContext';
 import toast from 'react-hot-toast';
+
+// Calendar SVG icon (black)
+const CalendarIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-800 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+);
 
 // ── Review Item Component ─────────────────────────────────────────────────────
 const ReviewItem = ({ review }) => (
@@ -37,13 +47,23 @@ const RoomDetails = () => {
     const { rooms, getToken, axios, navigate } = useAppContext();
     const [room, setRoom]             = useState(null);
     const [mainImage, setMainImage]   = useState(null);
-    const [checkInDate, setCheckInDate]   = useState(null);
-    const [checkOutDate, setCheckOutDate] = useState(null);
+    const [checkInDate, setCheckInDate]   = useState('');
+    const [checkOutDate, setCheckOutDate] = useState('');
     const [guests, setGuests]         = useState(1);
     const [isAvailable, setIsAvailable]   = useState(false);
     const [loading, setLoading]       = useState(false);
     const [reviews, setReviews]       = useState([]);
     const [reviewsLoading, setReviewsLoading] = useState(true);
+    const checkInRef  = useRef(null);
+    const checkOutRef = useRef(null);
+
+    const today = new Date().toISOString().split('T')[0];
+
+    const formatDisplay = (val) => {
+        if (!val) return 'dd-mm-yyyy';
+        const [y, m, d] = val.split('-');
+        return `${d}-${m}-${y}`;
+    };
 
     const fetchReviews = async (hotelId) => {
         try {
@@ -147,38 +167,48 @@ const RoomDetails = () => {
                 className='flex flex-col md:flex-row items-start md:items-center justify-between bg-white shadow-[0px_0px_24px_rgba(0,0,0,0.1)] p-6 rounded-2xl mx-auto mt-16 max-w-6xl gap-6'>
                 <div className='flex flex-col flex-wrap md:flex-row items-start md:items-center gap-4 md:gap-8 text-gray-600'>
                     <div className='flex flex-col w-full md:w-auto'>
-                        <label htmlFor="checkInDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-In</label>
-                        <div className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 cursor-pointer focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white'>
-                            <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
-                            <span className={`text-sm flex-1 ${checkInDate ? 'text-gray-800' : 'text-gray-400'}`}>
-                                {checkInDate ? new Date(checkInDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                        <label className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-In</label>
+                        <div
+                            onClick={() => { checkInRef.current?.showPicker?.(); checkInRef.current?.focus(); }}
+                            className='relative border border-gray-200 rounded-xl min-h-[46px] flex items-center justify-between px-3 gap-3 cursor-pointer hover:border-[#85A4E1] transition-all bg-white select-none w-full md:w-44'
+                        >
+                            <span className={`text-sm ${checkInDate ? 'text-gray-800' : 'text-gray-400'}`}>
+                                {formatDisplay(checkInDate)}
                             </span>
+                            <CalendarIcon />
                             <input
+                                ref={checkInRef}
                                 type="date"
                                 id='checkInDate'
                                 onChange={e => setCheckInDate(e.target.value)}
-                                min={new Date().toISOString().split('T')[0]}
+                                min={today}
                                 required
-                                className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                                className='absolute inset-0 w-full h-full opacity-0 cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0'
+                                tabIndex={-1}
                             />
                         </div>
                     </div>
                     <div className='w-px h-12 bg-gray-200 max-md:hidden' />
                     <div className='flex flex-col w-full md:w-auto'>
-                        <label htmlFor="checkOutDate" className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-Out</label>
-                        <div className={`relative border border-gray-200 rounded-xl min-h-[46px] flex items-center px-3 gap-2 focus-within:border-[#85A4E1] focus-within:ring-2 focus-within:ring-[#85A4E1]/20 transition-all bg-white ${!checkInDate ? 'opacity-50' : 'cursor-pointer'}`}>
-                            <img src={assets.calenderIcon} alt="" className='h-4 w-4 opacity-50 shrink-0' />
-                            <span className={`text-sm flex-1 ${checkOutDate ? 'text-gray-800' : 'text-gray-400'}`}>
-                                {checkOutDate ? new Date(checkOutDate + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') : 'dd-mm-yyyy'}
+                        <label className='text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5'>Check-Out</label>
+                        <div
+                            onClick={() => { if (checkInDate) { checkOutRef.current?.showPicker?.(); checkOutRef.current?.focus(); } }}
+                            className={`relative border border-gray-200 rounded-xl min-h-[46px] flex items-center justify-between px-3 gap-3 transition-all bg-white select-none w-full md:w-44 ${checkInDate ? 'cursor-pointer hover:border-[#85A4E1]' : 'opacity-50 cursor-not-allowed'}`}
+                        >
+                            <span className={`text-sm ${checkOutDate ? 'text-gray-800' : 'text-gray-400'}`}>
+                                {formatDisplay(checkOutDate)}
                             </span>
+                            <CalendarIcon />
                             <input
+                                ref={checkOutRef}
                                 type="date"
                                 id='checkOutDate'
                                 onChange={e => setCheckOutDate(e.target.value)}
-                                min={checkInDate || new Date().toISOString().split('T')[0]}
+                                min={checkInDate || today}
                                 disabled={!checkInDate}
                                 required
-                                className='absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed'
+                                className='absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed [&::-webkit-calendar-picker-indicator]:opacity-0'
+                                tabIndex={-1}
                             />
                         </div>
                     </div>
