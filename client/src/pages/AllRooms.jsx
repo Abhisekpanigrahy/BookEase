@@ -164,12 +164,14 @@ const AllRooms = () => {
                 });
                 const matchDest  = !dest || r.hotel.city.toLowerCase().includes(dest.toLowerCase());
                 
-                // Search query match (hotel name, address, or city)
+                // Search query match (hotel name, address, city, room type, price, or amenities)
                 const matchQuery = !q || 
                     r.hotel.name.toLowerCase().includes(q) || 
                     r.hotel.address.toLowerCase().includes(q) || 
                     r.hotel.city.toLowerCase().includes(q) ||
-                    r.roomType.toLowerCase().includes(q);
+                    r.roomType.toLowerCase().includes(q) ||
+                    r.pricePerNight.toString().includes(q) ||
+                    r.amenities.some(a => a.toLowerCase().includes(q));
 
                 return matchType && matchPrice && matchDest && matchQuery;
             })
@@ -311,7 +313,7 @@ const AllRooms = () => {
                         <input 
                             ref={searchInputRef}
                             type="text" 
-                            placeholder="Search by hotel name, city, or address..." 
+                            placeholder="Search by hotel, city, price, or amenities (e.g. WiFi)..." 
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className='w-full bg-white border border-gray-200 rounded-2xl py-4 pl-12 pr-4 text-sm outline-none focus:border-[#5b7fe8] focus:ring-4 focus:ring-[#5b7fe8]/5 transition-all shadow-sm'

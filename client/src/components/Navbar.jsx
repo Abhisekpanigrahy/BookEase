@@ -111,9 +111,9 @@ const Navbar = () => {
             </div>
 
             {/* Mobile toggle */}
-            <div className="flex items-center gap-3 md:hidden">
+            <div className="flex items-center gap-4 md:hidden">
                 <img src={assets.searchIcon} alt="search"
-                    className={`${isScrolled ? 'invert' : ''} h-5 cursor-pointer`}
+                    className={`${isScrolled ? 'invert' : ''} h-6 w-6 cursor-pointer active:scale-90 transition-all`}
                     onClick={() => { navigate('/rooms?focusSearch=true'); scrollTo(0, 0); }} />
                 {user && (
                     <UserButton>
