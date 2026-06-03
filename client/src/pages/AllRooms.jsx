@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { assets, facilityIcons } from '../assets/assets'
 import { useSearchParams } from 'react-router-dom'
 import StarRating from '../components/StarRating'
@@ -118,6 +118,19 @@ const AllRooms = () => {
     const [openFilters,    setOpenFilters]    = useState(false);
     const [selectedFilters, setSelectedFilters] = useState({ roomType: [], priceRange: [] });
     const [selectedSort,   setSelectedSort]   = useState('');
+    const [searchQuery,    setSearchQuery]    = useState('');
+    
+    const searchInputRef = useRef(null);
+
+    useEffect(() => {
+        if (searchParams.get('focusSearch') === 'true') {
+            searchInputRef.current?.focus();
+            // Clean up the URL param without refreshing
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete('focusSearch');
+            setSearchParams(newParams, { replace: true });
+        }
+    }, [searchParams]);
 
     const roomTypes   = ['Single Bed', 'Double Bed', 'Luxury Room', 'Family Suite'];
     const priceRanges = ['0 to 500', '500 to 1000', '1000 to 2000', '2000 to 3000'];
@@ -140,6 +153,8 @@ const AllRooms = () => {
 
     const filteredRooms = useMemo(() => {
         const dest = searchParams.get('destination');
+        const q = searchQuery.toLowerCase().trim();
+
         return rooms
             .filter(r => {
                 const matchType  = !selectedFilters.roomType.length || selectedFilters.roomType.includes(r.roomType);
@@ -148,7 +163,15 @@ const AllRooms = () => {
                     return r.pricePerNight >= min && r.pricePerNight <= max;
                 });
                 const matchDest  = !dest || r.hotel.city.toLowerCase().includes(dest.toLowerCase());
-                return matchType && matchPrice && matchDest;
+                
+                // Search query match (hotel name, address, or city)
+                const matchQuery = !q || 
+                    r.hotel.name.toLowerCase().includes(q) || 
+                    r.hotel.address.toLowerCase().includes(q) || 
+                    r.hotel.city.toLowerCase().includes(q) ||
+                    r.roomType.toLowerCase().includes(q);
+
+                return matchType && matchPrice && matchDest && matchQuery;
             })
             .sort((a, b) => {
                 if (selectedSort === 'Price Low to High')  return a.pricePerNight - b.pricePerNight;
@@ -156,11 +179,12 @@ const AllRooms = () => {
                 if (selectedSort === 'Newest First')       return new Date(b.createdAt) - new Date(a.createdAt);
                 return 0;
             });
-    }, [rooms, selectedFilters, selectedSort, searchParams]);
+    }, [rooms, selectedFilters, selectedSort, searchParams, searchQuery]);
 
     const clearFilters = () => {
         setSelectedFilters({ roomType: [], priceRange: [] });
         setSelectedSort('');
+        setSearchQuery('');
         setSearchParams({});
     };
 
@@ -274,11 +298,45 @@ const AllRooms = () => {
                     </div>
                 </AnimateIn>
 
-                {/* ── Results â”€â”€ */}
+                {/* ── Results ── */}
                 <AnimateIn as='div' variant='fadeUpSoft' className='flex-1 min-w-0'>
+                    
+                    {/* Search Bar */}
+                    <div className='mb-6 relative group'>
+                        <div className='absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#5b7fe8] transition-colors'>
+                            <svg className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2.5} d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+                            </svg>
+                        </div>
+                        <input 
+                            ref={searchInputRef}
+                            type="text" 
+                            placeholder="Search by hotel name, city, or address..." 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className='w-full bg-white border border-gray-200 rounded-2xl py-4 pl-12 pr-4 text-sm outline-none focus:border-[#5b7fe8] focus:ring-4 focus:ring-[#5b7fe8]/5 transition-all shadow-sm'
+                        />
+                        {searchQuery && (
+                            <button 
+                                onClick={() => setSearchQuery('')}
+                                className='absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1'
+                            >
+                                <svg className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+
                     {/* Active filter pills */}
-                    {(selectedFilters.roomType.length > 0 || selectedFilters.priceRange.length > 0 || selectedSort) && (
+                    {(selectedFilters.roomType.length > 0 || selectedFilters.priceRange.length > 0 || selectedSort || searchQuery) && (
                         <div className='flex flex-wrap gap-2 mb-5'>
+                            {searchQuery && (
+                                <span className='inline-flex items-center gap-1.5 bg-[#5b7fe8]/10 text-[#5b7fe8] text-xs font-semibold px-3 py-1.5 rounded-full'>
+                                    Search: {searchQuery}
+                                    <button onClick={() => setSearchQuery('')} className='hover:text-[#4a6edb] cursor-pointer leading-none'>×</button>
+                                </span>
+                            )}
                             {[...selectedFilters.roomType, ...selectedFilters.priceRange].map(f => (
                                 <span key={f} className='inline-flex items-center gap-1.5 bg-[#85A4E1]/10 text-[#5b7fe8] text-xs font-semibold px-3 py-1.5 rounded-full'>
                                     {f}

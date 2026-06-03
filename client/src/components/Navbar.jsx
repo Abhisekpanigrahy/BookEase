@@ -91,7 +91,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center gap-4">
                 <img src={assets.searchIcon} alt="search"
                     className={`${isScrolled ? 'invert' : ''} h-6 cursor-pointer transition-all duration-500`}
-                    onClick={() => { navigate('/rooms'); scrollTo(0, 0); }} />
+                    onClick={() => { navigate('/rooms?focusSearch=true'); scrollTo(0, 0); }} />
 
                 {/* Show nothing until Clerk resolves, then login or avatar */}
                 {!authReady ? (
@@ -112,6 +112,9 @@ const Navbar = () => {
 
             {/* Mobile toggle */}
             <div className="flex items-center gap-3 md:hidden">
+                <img src={assets.searchIcon} alt="search"
+                    className={`${isScrolled ? 'invert' : ''} h-5 cursor-pointer`}
+                    onClick={() => { navigate('/rooms?focusSearch=true'); scrollTo(0, 0); }} />
                 {user && (
                     <UserButton>
                         <UserButton.MenuItems>
