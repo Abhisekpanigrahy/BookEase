@@ -107,31 +107,9 @@ MongoDB (Data Layer)
 Stripe (Payment Gateway)
 Cloudinary (Image Storage)
 Clerk (Authentication)
+
+
 ```
-
-
----
-
-## 📸 Screenshots
-
-### Homepage
-![Homepage](images/homepage.png)
-
-### Room Details
-![Room Details](images/room-details.png)
-
-### Booking Page
-![Booking Page](images/booking-page.png)
-
-### Stripe Checkout
-![Stripe Checkout](images/stripe-checkout.png)
-
-### Dashboard
-![Dashboard](images/dashboard.png)
-
-
-
----
 
 ## 🔑 Environment Variables
 
