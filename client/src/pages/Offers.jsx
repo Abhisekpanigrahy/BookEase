@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { assets, exclusiveOffers } from '../assets/assets'
 import AnimateIn, { StaggerContainer, StaggerItem } from '../components/AnimateIn'
 import Title from '../components/Title'
