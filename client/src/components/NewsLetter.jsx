@@ -56,14 +56,14 @@ const NewsLetter = () => {
                             <p className='text-sm text-white/60 mt-1'>Check your inbox for a welcome surprise.</p>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-3 mt-8 w-full max-w-md'>
+                        <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-3 mt-8 w-full max-w-md p-2 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm'>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 required
                                 disabled={loading}
-                                className='flex-1 bg-white/10 border border-white/20 text-white placeholder:text-white/40 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#85A4E1] transition-colors disabled:opacity-60'
+                                className='flex-1 bg-transparent border-none text-white placeholder:text-white/40 px-4 py-3 text-sm outline-none disabled:opacity-60'
                                 placeholder='Enter your email address'
                             />
                             <button

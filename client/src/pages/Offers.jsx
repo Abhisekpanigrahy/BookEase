@@ -5,7 +5,29 @@ import Title from '../components/Title'
 import { useAppContext } from '../context/AppContext'
 
 const Offers = () => {
-    const { navigate } = useAppContext();
+    const { navigate, axios, toast } = useAppContext();
+    const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubscribe = async (e) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setLoading(true);
+        try {
+            const { data } = await axios.post('/api/newsletter/subscribe', { email });
+            if (data.success) {
+                toast.success(data.message || 'You\'re subscribed! Check your inbox 🎉');
+                setEmail("");
+            } else {
+                toast.error(data.message || 'Something went wrong. Please try again.');
+            }
+        } catch (err) {
+            toast.error(err.message || 'Subscription failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <AnimateIn as='div' variant='fadeUpSoft' className='py-28 md:py-35 px-4 md:px-16 lg:px-24 xl:px-32'>
@@ -70,10 +92,23 @@ const Offers = () => {
                     <p className='text-gray-500 text-sm max-w-md'>Subscribe to our newsletter and be the first to know about exclusive discounts, member-only rates, and secret getaway packages.</p>
                 </div>
                 <div className='flex-1 w-full max-w-md'>
-                    <div className='bg-white p-2 rounded-2xl shadow-xl flex gap-2 border border-gray-100'>
-                        <input type="email" placeholder="Enter your email" className='flex-1 px-4 py-3 outline-none text-sm' />
-                        <button className='bg-slate-900 text-white px-8 py-3 rounded-xl text-sm font-bold hover:bg-[#5b7fe8] transition-all shrink-0'>Join Now</button>
-                    </div>
+                    <form onSubmit={handleSubscribe} className='bg-white p-2 rounded-2xl shadow-xl flex flex-col sm:flex-row gap-2 border border-gray-100'>
+                        <input 
+                            type="email" 
+                            placeholder="Enter your email" 
+                            className='flex-1 px-4 py-3 outline-none text-sm'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <button 
+                            type="submit"
+                            disabled={loading}
+                            className='bg-slate-900 text-white px-8 py-3 rounded-xl text-sm font-bold hover:bg-[#5b7fe8] transition-all shrink-0 active:scale-95 disabled:opacity-60'
+                        >
+                            {loading ? 'Subscribing...' : 'Join Now'}
+                        </button>
+                    </form>
                 </div>
             </div>
         </AnimateIn>
