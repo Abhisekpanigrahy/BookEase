@@ -231,13 +231,42 @@ const MyBookings = () => {
                                                 {paying === booking._id ? 'Redirecting…' : 'Pay Now →'}
                                             </button>
                                         )}
-                                        {booking.isPaid && (
+                                        {booking.isPaid && !booking.review && (
                                             <button 
                                                 onClick={() => setReviewing(booking)}
                                                 className='text-xs font-bold text-[#5b7fe8] border border-[#5b7fe8] hover:bg-[#5b7fe8] hover:text-white px-5 py-2 rounded-xl transition-all active:scale-95 cursor-pointer'
                                             >
                                                 Rate Experience
                                             </button>
+                                        )}
+                                        {booking.review && (
+                                            <div className='flex flex-col gap-1.5 p-3 bg-slate-50 rounded-xl border border-gray-100 w-full'>
+                                                <div className='flex items-center justify-between'>
+                                                    <div className='flex items-center gap-1.5'>
+                                                        <div className='flex gap-0.5'>
+                                                            {[...Array(5)].map((_, i) => (
+                                                                <img 
+                                                                    key={i} 
+                                                                    src={i < booking.review.rating ? assets.starIconFilled : assets.starIconOutlined} 
+                                                                    alt="star" 
+                                                                    className='h-2.5 w-2.5' 
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                        <span className='text-[10px] font-bold text-[#5b7fe8]'>{booking.review.rating}/5</span>
+                                                    </div>
+                                                    <span className='text-[9px] text-gray-400 font-medium'>
+                                                        {new Date(booking.review.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                                                    </span>
+                                                </div>
+                                                <p className='text-[11px] text-gray-500 italic line-clamp-2 leading-relaxed'>
+                                                    "{booking.review.comment}"
+                                                </p>
+                                                <div className='flex items-center gap-1 mt-1'>
+                                                    <span className='w-1 h-1 rounded-full bg-emerald-500' />
+                                                    <span className='text-[9px] font-bold text-emerald-600 uppercase tracking-tighter'>Already Reviewed</span>
+                                                </div>
+                                            </div>
                                         )}
                                     </div>
                                 </AnimateIn>

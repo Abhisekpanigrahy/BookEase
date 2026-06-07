@@ -2,6 +2,7 @@ import transporter from "../configs/nodemailer.js";
 import Booking from "../models/Booking.js"
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
+import Review from "../models/Review.js";
 import stripe from "stripe";
 
 // Function to Check Availability of R
@@ -125,8 +126,19 @@ export const getUserBookings = async (req, res) => {
         // This prevents frontend crashes when a room is deleted
         bookings = bookings.filter(b => b.room);
 
+        // Fetch all reviews for this user to match with bookings
+        const reviews = await Review.find({ user: user.toString() });
+
+        // Map reviews to bookings
+        const bookingsWithReviews = bookings.map(booking => {
+            const bookingObj = booking.toObject();
+            // Find review by booking ID
+            bookingObj.review = reviews.find(r => r.booking.toString() === booking._id.toString()) || null;
+            return bookingObj;
+        });
+
         // Send response with the cleaned and sorted data
-        res.json({ success: true, bookings });
+        res.json({ success: true, bookings: bookingsWithReviews });
 
     } catch (error) {
         // Handle errors such as database issues or invalid user

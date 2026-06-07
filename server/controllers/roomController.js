@@ -39,7 +39,7 @@ export const getRooms = async (req, res) => {
         }).sort({createdAt: -1});
 
         // Get unique hotel IDs from the rooms
-        const hotelIds = [...new Set(rooms.map(room => room.hotel._id))];
+        const hotelIds = [...new Set(rooms.map(room => room.hotel._id.toString()))];
 
         // Fetch all reviews for these hotels in one go
         const reviews = await Review.find({ hotel: { $in: hotelIds } });

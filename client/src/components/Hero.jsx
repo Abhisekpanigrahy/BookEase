@@ -52,7 +52,7 @@ const Hero = () => {
             <div className='absolute inset-0 bg-[url("https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=85&auto=format&fit=crop")] bg-no-repeat bg-cover bg-center' />
             <div className='absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70' />
 
-            <div className='relative z-10 flex flex-col items-center text-center px-4 md:px-8 mt-16 pb-12 md:pb-0'>
+            <div className='relative z-10 flex flex-col items-center text-center px-4 md:px-8 mt-16 md:pb-0'>
                 <span className='inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-medium px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase'>
                     ✦ Premium Hotel Booking
                 </span>

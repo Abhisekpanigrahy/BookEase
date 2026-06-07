@@ -66,6 +66,8 @@ const RoomDetails = () => {
     };
 
     const fetchReviews = async (hotelId) => {
+        setReviewsLoading(true);
+        setReviews([]);
         try {
             const { data } = await axios.get(`/api/reviews/hotel/${hotelId}`);
             if (data.success) setReviews(data.reviews);
