@@ -9,6 +9,8 @@ const reviewSchema = new mongoose.Schema({
     comment: { type: String, required: true },
 }, { timestamps: true });
 
+reviewSchema.index({ hotel: 1 });
+
 const Review = mongoose.model('Review', reviewSchema);
 
 export default Review;

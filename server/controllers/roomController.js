@@ -38,19 +38,36 @@ export const getRooms = async (req, res) => {
             populate: { path: 'owner', select: 'image email' }
         }).sort({createdAt: -1});
 
-        // For each room, fetch reviews to calculate avg rating
-        const roomsWithReviews = await Promise.all(rooms.map(async (room) => {
-            const reviews = await Review.find({ hotel: room.hotel._id });
-            const avgRating = reviews.length > 0 
-                ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+        // Get unique hotel IDs from the rooms
+        const hotelIds = [...new Set(rooms.map(room => room.hotel._id))];
+
+        // Fetch all reviews for these hotels in one go
+        const reviews = await Review.find({ hotel: { $in: hotelIds } });
+
+        // Calculate average rating and total reviews for each hotel
+        const reviewStats = reviews.reduce((acc, review) => {
+            const hotelId = review.hotel.toString();
+            if (!acc[hotelId]) {
+                acc[hotelId] = { totalRating: 0, count: 0 };
+            }
+            acc[hotelId].totalRating += review.rating;
+            acc[hotelId].count += 1;
+            return acc;
+        }, {});
+
+        // Map stats back to rooms
+        const roomsWithReviews = rooms.map(room => {
+            const hotelId = room.hotel._id.toString();
+            const stats = reviewStats[hotelId];
+            const avgRating = stats 
+                ? (stats.totalRating / stats.count).toFixed(1)
                 : "0.0";
             
-            // Convert to plain object to add property
             const roomObj = room.toObject();
             roomObj.avgRating = avgRating;
-            roomObj.totalReviews = reviews.length;
+            roomObj.totalReviews = stats ? stats.count : 0;
             return roomObj;
-        }));
+        });
 
         res.json({success: true, rooms: roomsWithReviews});
     } catch (error) {
